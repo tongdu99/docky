@@ -27,6 +27,29 @@ custom icons, and scripted actions.
   <img src="docs/images/hero.jpg" alt="Docky on macOS" width="900">
 </div>
 
+## Fork changes — 0.9.10
+
+This fork includes the following customizations on top of upstream v0.9.7:
+
+- **Bottom-left placement:** choose **Settings → Behavior → Window Position →
+  Bottom Left** to anchor a vertical dock to the bottom of the left screen edge.
+- **Hover thumbnails:** previews pick up images that finish capturing after the
+  popup opens and show a status message when an image is unavailable or Screen
+  Recording permission is missing.
+- **Preview dismissal:** dismiss the hover popup immediately to avoid an old
+  fade-out hiding a reopened preview, and ignore stale hover callbacks.
+- **Instant Focus:** keep the window switcher overlay visible while each selected
+  window receives focus.
+- **Faster In Place previews:** reduce the initial wait from one second to
+  150 ms and display a cached image while live capture starts.
+- **Shortcut guidance:** clarify that Docky's default shortcut is **Option+Tab**.
+  Configure it under **Settings → Window Management → Window Switcher**.
+
+For Instant Focus, enable **Window Switcher** and **Switcher Preview**, choose
+**Thumbnails**, and select **Instant Focus**. Screen Recording permission is
+required for thumbnail capture. The hover preview delay is configured separately
+under **Window Preview**.
+
 ## Why Docky
 
 The Dock is the most-used surface on a Mac, and it has barely changed in years.
@@ -115,7 +138,7 @@ windows and render previews. It prompts for these on first launch.
 ## Building from source
 
 ```sh
-git clone https://github.com/josejuanqm/docky.git
+git clone --branch codex/docky-customizations https://github.com/tongdu99/docky.git
 cd docky
 open Docky.xcodeproj
 ```
