@@ -27,11 +27,12 @@ final class WindowPreviewWindowController: NSWindowController, ObservableObject 
 
     private var currentTileID: String?
     private var currentBundleIdentifier: String?
+    private var presentationID = UUID()
+    private var sourceScreenFrame: CGRect = .zero
     private var isPreviewHovered = false
     private var isHoldingDockVisible = false
     private weak var heldMainWindow: MainWindow?
     private var pendingDismissTask: Task<Void, Never>?
-    private var dismissAnimationTask: Task<Void, Never>?
 
     private init() {
         let window = NSWindow(
@@ -97,13 +98,14 @@ final class WindowPreviewWindowController: NSWindowController, ObservableObject 
             return true
         }
 
+        presentationID = UUID()
+        isPreviewHovered = false
+        sourceScreenFrame = convertToScreen(sourceFrame)
         currentTileID = sourceTileID
         currentBundleIdentifier = bundleIDs.count == 1 ? bundleIDs.first : nil
         activeSourceTileID = sourceTileID
         pendingDismissTask?.cancel()
         pendingDismissTask = nil
-        dismissAnimationTask?.cancel()
-        dismissAnimationTask = nil
         beginDockVisibilityHoldIfNeeded()
 
         // Two-pass sizing: measure the natural content, then re-host the
@@ -112,7 +114,7 @@ final class WindowPreviewWindowController: NSWindowController, ObservableObject 
         // size (one-card thumbnail layouts are narrower than 240pt, and
         // NSHostingView would otherwise top-leading-align the content,
         // leaving the visible card offset from the source tile's midX).
-        let sizingHostingView = NSHostingView(rootView: WindowPreviewWindowContent(sourceTileID: sourceTileID))
+        let sizingHostingView = NSHostingView(rootView: WindowPreviewWindowContent(sourceTileID: sourceTileID, presentationID: presentationID))
         sizingHostingView.layoutSubtreeIfNeeded()
         let fittingSize = sizingHostingView.fittingSize
         let windowSize = CGSize(
@@ -120,7 +122,7 @@ final class WindowPreviewWindowController: NSWindowController, ObservableObject 
             height: max(fittingSize.height, 80)
         )
         let hostingView = NSHostingView(
-            rootView: WindowPreviewWindowContent(sourceTileID: sourceTileID)
+            rootView: WindowPreviewWindowContent(sourceTileID: sourceTileID, presentationID: presentationID)
                 .frame(width: windowSize.width, height: windowSize.height)
         )
 
@@ -154,37 +156,15 @@ final class WindowPreviewWindowController: NSWindowController, ObservableObject 
         pendingDismissTask = nil
         isPreviewHovered = false
         endDockVisibilityHoldIfNeeded()
+        presentationID = UUID()
         currentTileID = nil
         currentBundleIdentifier = nil
         activeSourceTileID = nil
 
-        // Don't clear WindowPreviewService state yet — the SwiftUI body
-        // observes it, and emptying it synchronously would blank the popover
-        // content before the alpha animation has a chance to play. We clear
-        // it in the completion handler so the user sees a real fade-out.
-
-        guard let window, window.isVisible else {
-            WindowPreviewService.shared.dismiss()
-            close()
-            return
-        }
-
-        dismissAnimationTask?.cancel()
-        dismissAnimationTask = Task { @MainActor in
-            await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
-                NSAnimationContext.runAnimationGroup({ context in
-                    context.duration = Self.animationDuration
-                    context.timingFunction = CAMediaTimingFunction(name: .easeIn)
-                    window.animator().alphaValue = 0
-                }, completionHandler: {
-                    continuation.resume()
-                })
-            }
-            if Task.isCancelled { return }
-            guard self.currentTileID == nil else { return }
-            WindowPreviewService.shared.dismiss()
-            self.close()
-        }
+        // Hide synchronously: cancelling a Task does not cancel an AppKit
+        // animator, which could otherwise fade a reopened preview to zero.
+        window?.orderOut(nil)
+        WindowPreviewService.shared.dismiss()
     }
 
     func requestDismiss(sourceTileID: String) {
@@ -196,12 +176,13 @@ final class WindowPreviewWindowController: NSWindowController, ObservableObject 
             try? await Task.sleep(for: Self.dismissGrace)
             guard !Task.isCancelled else { return }
             guard self.currentTileID == sourceTileID, !self.isPreviewHovered else { return }
+            guard !self.sourceScreenFrame.contains(NSEvent.mouseLocation) else { return }
             self.dismiss(sourceTileID: sourceTileID)
         }
     }
 
-    fileprivate func setPreviewHovered(_ isHovered: Bool, sourceTileID: String) {
-        guard currentTileID == sourceTileID else { return }
+    fileprivate func setPreviewHovered(_ isHovered: Bool, sourceTileID: String, presentationID: UUID) {
+        guard currentTileID == sourceTileID, self.presentationID == presentationID else { return }
         isPreviewHovered = isHovered
 
         if isHovered {
@@ -336,13 +317,14 @@ final class WindowPreviewWindowController: NSWindowController, ObservableObject 
 /// uses to bridge tile hover and detached-window hover.
 private struct WindowPreviewWindowContent: View {
     let sourceTileID: String
+    let presentationID: UUID
 
     var body: some View {
         WindowPreviewView()
             .contentShape(Rectangle())
             .padding(.bottom, 8)
             .onHover { isHovering in
-                WindowPreviewWindowController.shared.setPreviewHovered(isHovering, sourceTileID: sourceTileID)
+                WindowPreviewWindowController.shared.setPreviewHovered(isHovering, sourceTileID: sourceTileID, presentationID: presentationID)
             }
     }
 }
@@ -514,7 +496,12 @@ private struct WindowPreviewCard: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(maxWidth: previewWidth, maxHeight: previewHeight)
             } else {
-                Color.black.opacity(0.01)
+                Text(PermissionsService.shared.screenCapture == .granted
+                     ? "Preview unavailable"
+                     : "Screen Recording permission required")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
                     .frame(maxWidth: previewWidth, maxHeight: previewHeight)
             }
         }

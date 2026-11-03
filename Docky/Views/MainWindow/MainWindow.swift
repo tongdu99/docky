@@ -910,7 +910,8 @@ final class MainWindow: NSPanel {
         ))
         // Keep the chrome stretched across the current dock axis even when the
         // tile layout itself remains content-sized.
-        let displayedAxisLength = availableAxisLength
+        let displayedAxisLength = preferences.windowPosition == .bottomLeft && !fullAxis
+            ? displayedChromeAxisLength : availableAxisLength
         // Magnified icons render beyond the chrome's natural cross-axis
         // extent. We grow only the window, not the chrome rect, so the
         // chrome itself keeps its resting shape and the icons spill into
@@ -1115,7 +1116,9 @@ final class MainWindow: NSPanel {
         case .left:
             return CGPoint(
                 x: hidden ? screenBounds.minX - size.width : screenBounds.minX,
-                y: screenBounds.minY + (screenBounds.height - size.height) / 2
+                y: preferences.windowPosition == .bottomLeft
+                    ? screenBounds.minY
+                    : screenBounds.minY + (screenBounds.height - size.height) / 2
             )
         case .right:
             return CGPoint(

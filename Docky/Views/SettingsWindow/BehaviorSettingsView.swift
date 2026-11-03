@@ -98,7 +98,7 @@ struct BehaviorSettingsView: View {
                     .labelsHidden()
                 }
 
-                Text("Choose where Docky sits on screen, or mirror the macOS Dock position.")
+                Text("Choose where Docky sits on screen, or mirror the macOS Dock position. Bottom Left places a vertical dock at the bottom of the left edge.")
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }

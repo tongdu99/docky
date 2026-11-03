@@ -23,7 +23,7 @@ final class WindowPreviewService: ObservableObject {
     @Published private(set) var presentedSourceTileID: String?
     @Published private(set) var presentedBundleIdentifier: String?
 
-    private(set) var windowPreviews: [String: NSImage] = [:]
+    @Published private(set) var windowPreviews: [String: NSImage] = [:]
 
     var resolvedLayout: WindowSwitcherLayout {
         let canCapture = PermissionsService.shared.screenCapture == .granted
@@ -31,10 +31,31 @@ final class WindowPreviewService: ObservableObject {
             .resolved(canCaptureThumbnails: canCapture)
     }
 
-    private init() {}
+    private var previewSubscription: AnyCancellable?
+
+    private init() {
+        previewSubscription = WorkspaceService.shared.$appWindowPreviews
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] previews in
+                self?.mergeWindowPreviews(previews)
+            }
+    }
+
+    private func mergeWindowPreviews(_ previews: [String: NSImage]) {
+        guard presentedSourceTileID != nil else { return }
+        var updated = windowPreviews
+        var changed = false
+        for window in windows where updated[window.windowIdentifier] == nil {
+            if let image = previews[window.windowIdentifier] {
+                updated[window.windowIdentifier] = image
+                changed = true
+            }
+        }
+        if changed { windowPreviews = updated }
+    }
 
     /// Returns true when the popover should present. Captures the current
-    /// window list and freezes preview images so the popover stays stable
+    /// window list and fills missing images as capture completes so the popover stays stable
     /// while the user is interacting with it. Re-presenting for the same
     /// tile id is a no-op so cursor jitter doesn't reset selection.
     @discardableResult

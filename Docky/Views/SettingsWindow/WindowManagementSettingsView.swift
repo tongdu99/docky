@@ -53,7 +53,7 @@ struct WindowManagementSettingsView: View {
                             Text("Shortcut")
                                 .font(.headline)
 
-                            Text("Choose the global shortcut that opens Docky's Cmd-Tab-style window switcher.")
+                            Text("Choose the global shortcut that opens Docky's window switcher. The default is Option-Tab; Command-Tab opens the macOS switcher.")
                                 .foregroundStyle(.secondary)
                                 .fixedSize(horizontal: false, vertical: true)
                         }

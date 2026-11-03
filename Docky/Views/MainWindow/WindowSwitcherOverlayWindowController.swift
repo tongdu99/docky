@@ -13,25 +13,10 @@ final class WindowSwitcherOverlayWindowController: NSWindowController {
     private let animationDuration: TimeInterval = 0.18
     private let preferences = DockyPreferences.shared
 
-    private var showsOverlayUI: Bool {
-        // Empty state — there's nothing to focus-preview, so we need the
-        // overlay to render the "No windows available" message.
-        if WindowSwitcherService.shared.windows.isEmpty {
-            return true
-        }
-
-        // List layout always needs the overlay — it's the only thing the user
-        // sees, since there are no window thumbnails behind it.
-        if WindowSwitcherService.shared.resolvedLayout == .list {
-            return true
-        }
-
-        guard preferences.showsWindowSwitcherFocusPreview,
-              preferences.windowSwitcherPreviewMode == .instantFocus else {
-            return true
-        }
-
-        return false
+    private var usesInstantFocus: Bool {
+        preferences.showsWindowSwitcherFocusPreview
+            && preferences.windowSwitcherPreviewMode == .instantFocus
+            && WindowSwitcherService.shared.resolvedLayout == .thumbnails
     }
 
     init(mainWindow: MainWindow) {
@@ -83,24 +68,20 @@ final class WindowSwitcherOverlayWindowController: NSWindowController {
     private func presentOverlay() {
         guard let window else { return }
 
-        guard showsOverlayUI else {
-            configureHiddenWindowState()
-            return
-        }
-
         updateFrame()
         window.alphaValue = 1
         window.ignoresMouseEvents = false
-        window.makeKeyAndOrderFront(nil)
-        NSApp.activate(ignoringOtherApps: true)
+        if usesInstantFocus {
+            // Keep the selection visible without taking focus back from
+            // the window that Instant Focus just activated.
+            window.orderFrontRegardless()
+        } else {
+            window.makeKeyAndOrderFront(nil)
+            NSApp.activate(ignoringOtherApps: true)
+        }
     }
 
     private func dismissOverlay() {
-        guard showsOverlayUI else {
-            configureHiddenWindowState()
-            return
-        }
-
         animateWindowAlpha(to: 0) { [weak self] in
             guard let self, let window = self.window else { return }
 
@@ -162,11 +143,7 @@ final class WindowSwitcherOverlayWindowController: NSWindowController {
             return
         }
 
-        if showsOverlayUI {
-            presentOverlay()
-        } else {
-            configureHiddenWindowState()
-        }
+        presentOverlay()
     }
 
     private func updateFrame() {

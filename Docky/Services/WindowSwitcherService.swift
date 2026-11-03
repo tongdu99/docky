@@ -492,8 +492,9 @@ final class WindowSwitcherService: ObservableObject {
         }
 
         focusedPreviewTask = Task { [weak self] in
-            try? await Task.sleep(for: .seconds(1))
+            try? await Task.sleep(for: .milliseconds(150))
 
+            guard !Task.isCancelled else { return }
             await self?.runFocusedPreviewLoop(forWindowIdentifier: identifier)
         }
     }
@@ -508,6 +509,14 @@ final class WindowSwitcherService: ObservableObject {
               !screenBounds.isEmpty else {
             focusedPreview = nil
             return
+        }
+
+        if let image = WorkspaceService.shared.appWindowPreview(for: window) {
+            focusedPreview = FocusedWindowPreview(
+                windowIdentifier: identifier,
+                image: image,
+                screenBounds: screenBounds
+            )
         }
 
         let startedLivePreview = await WorkspaceService.shared.startLiveFocusPreview(for: window) { [weak self] image in
