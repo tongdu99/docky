@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="980" viewBox="0 0 1320 980"><title>Docky revision 4 proposed layout</title><rect width="1320" height="980" fill="#f3f6fa"/>
+<text x="36" y="42" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#2569c8" font-weight="700" text-anchor="start">REVISION 4 · APPROVED DESIGN</text>
+<text x="36" y="84" font-family="Helvetica,Arial,sans-serif" font-size="32" fill="#243247" font-weight="700" text-anchor="start">Choose the position you can see.</text>
+<text x="36" y="116" font-family="Helvetica,Arial,sans-serif" font-size="17" fill="#58687d" font-weight="400" text-anchor="start">One screen diagram. Twelve direct targets. No orientation category that moves the dock.</text>
+<rect x="28" y="142" width="824" height="556" rx="10" fill="#fff" stroke="none"/>
+<text x="52" y="180" font-family="Helvetica,Arial,sans-serif" font-size="23" fill="#243247" font-weight="700" text-anchor="start">Dock Position</text>
+<text x="52" y="207" font-family="Helvetica,Arial,sans-serif" font-size="15" fill="#58687d" font-weight="400" text-anchor="start">Click a miniature dock to set its edge, alignment, and orientation.</text>
+<rect x="90" y="241" width="700" height="361" rx="12" fill="#ecf1f7" stroke="#9aabc0"/>
+<rect x="101" y="256" width="36" height="76" rx="8" fill="#f5f8fc" stroke="#bbcadd"/>
+<rect x="108" y="263" width="22" height="62" rx="5" fill="#839bb8" stroke="none"/>
+<circle cx="119.0" cy="276" r="4" fill="white"/>
+<circle cx="119.0" cy="294" r="4" fill="white"/>
+<circle cx="119.0" cy="312" r="4" fill="white"/>
+<rect x="743" y="256" width="36" height="76" rx="8" fill="#f5f8fc" stroke="#bbcadd"/>
+<rect x="750" y="263" width="22" height="62" rx="5" fill="#839bb8" stroke="none"/>
+<circle cx="761.0" cy="276" r="4" fill="white"/>
+<circle cx="761.0" cy="294" r="4" fill="white"/>
+<circle cx="761.0" cy="312" r="4" fill="white"/>
+<rect x="101" y="383" width="36" height="76" rx="8" fill="#f5f8fc" stroke="#bbcadd"/>
+<rect x="108" y="390" width="22" height="62" rx="5" fill="#839bb8" stroke="none"/>
+<circle cx="119.0" cy="403" r="4" fill="white"/>
+<circle cx="119.0" cy="421" r="4" fill="white"/>
+<circle cx="119.0" cy="439" r="4" fill="white"/>
+<rect x="743" y="383" width="36" height="76" rx="8" fill="#f5f8fc" stroke="#bbcadd"/>
+<rect x="750" y="390" width="22" height="62" rx="5" fill="#839bb8" stroke="none"/>
+<circle cx="761.0" cy="403" r="4" fill="white"/>
+<circle cx="761.0" cy="421" r="4" fill="white"/>
+<circle cx="761.0" cy="439" r="4" fill="white"/>
+<rect x="101" y="511" width="36" height="76" rx="8" fill="#e7effb" stroke="#2676e9"/>
+<rect x="108" y="518" width="22" height="62" rx="5" fill="#2676e9" stroke="none"/>
+<circle cx="119.0" cy="531" r="4" fill="white"/>
+<circle cx="119.0" cy="549" r="4" fill="white"/>
+<circle cx="119.0" cy="567" r="4" fill="white"/>
+<rect x="743" y="511" width="36" height="76" rx="8" fill="#f5f8fc" stroke="#bbcadd"/>
+<rect x="750" y="518" width="22" height="62" rx="5" fill="#839bb8" stroke="none"/>
+<circle cx="761.0" cy="531" r="4" fill="white"/>
+<circle cx="761.0" cy="549" r="4" fill="white"/>
+<circle cx="761.0" cy="567" r="4" fill="white"/>
+<rect x="152" y="252" width="76" height="36" rx="8" fill="#f5f8fc" stroke="#bbcadd"/>
+<rect x="159" y="259" width="62" height="22" rx="5" fill="#839bb8" stroke="none"/>
+<circle cx="172" cy="270.0" r="4" fill="white"/>
+<circle cx="190" cy="270.0" r="4" fill="white"/>
+<circle cx="208" cy="270.0" r="4" fill="white"/>
+<rect x="152" y="551" width="76" height="36" rx="8" fill="#f5f8fc" stroke="#bbcadd"/>
+<rect x="159" y="558" width="62" height="22" rx="5" fill="#839bb8" stroke="none"/>
+<circle cx="172" cy="569.0" r="4" fill="white"/>
+<circle cx="190" cy="569.0" r="4" fill="white"/>
+<circle cx="208" cy="569.0" r="4" fill="white"/>
+<rect x="402" y="252" width="76" height="36" rx="8" fill="#f5f8fc" stroke="#bbcadd"/>
+<rect x="409" y="259" width="62" height="22" rx="5" fill="#839bb8" stroke="none"/>
+<circle cx="422" cy="270.0" r="4" fill="white"/>
+<circle cx="440" cy="270.0" r="4" fill="white"/>
+<circle cx="458" cy="270.0" r="4" fill="white"/>
+<rect x="402" y="551" width="76" height="36" rx="8" fill="#f5f8fc" stroke="#bbcadd"/>
+<rect x="409" y="558" width="62" height="22" rx="5" fill="#839bb8" stroke="none"/>
+<circle cx="422" cy="569.0" r="4" fill="white"/>
+<circle cx="440" cy="569.0" r="4" fill="white"/>
+<circle cx="458" cy="569.0" r="4" fill="white"/>
+<rect x="652" y="252" width="76" height="36" rx="8" fill="#f5f8fc" stroke="#bbcadd"/>
+<rect x="659" y="259" width="62" height="22" rx="5" fill="#839bb8" stroke="none"/>
+<circle cx="672" cy="270.0" r="4" fill="white"/>
+<circle cx="690" cy="270.0" r="4" fill="white"/>
+<circle cx="708" cy="270.0" r="4" fill="white"/>
+<rect x="652" y="551" width="76" height="36" rx="8" fill="#f5f8fc" stroke="#bbcadd"/>
+<rect x="659" y="558" width="62" height="22" rx="5" fill="#839bb8" stroke="none"/>
+<circle cx="672" cy="569.0" r="4" fill="white"/>
+<circle cx="690" cy="569.0" r="4" fill="white"/>
+<circle cx="708" cy="569.0" r="4" fill="white"/>
+<text x="440" y="370" font-family="Helvetica,Arial,sans-serif" font-size="25" fill="#52677f" font-weight="600" text-anchor="middle">12 positions</text>
+<text x="440" y="402" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#52677f" font-weight="400" text-anchor="middle">6 vertical  +  6 horizontal</text>
+<text x="440" y="433" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#52677f" font-weight="400" text-anchor="middle">Each corner has two separate choices.</text>
+<text x="440" y="490" font-family="Helvetica,Arial,sans-serif" font-size="15" fill="#2168d1" font-weight="600" text-anchor="middle">Selected: bottom left · vertical</text>
+<text x="52" y="641" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#58687d" font-weight="400" text-anchor="start">Hover: position name     •     Blue outline: current position</text>
+<text x="52" y="671" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#58687d" font-weight="400" text-anchor="start">The same diagram appears in Settings and the bar’s right-click menu.</text>
+<rect x="872" y="142" width="420" height="556" rx="10" fill="#fff" stroke="none"/>
+<text x="896" y="180" font-family="Helvetica,Arial,sans-serif" font-size="23" fill="#243247" font-weight="700" text-anchor="start">A bar inside the dock</text>
+<rect x="907" y="223" width="66" height="336" rx="12" fill="#dfe6ef" stroke="#a7b5c6"/>
+<rect x="920" y="237" width="40" height="22" rx="5" fill="#eaf0f7" stroke="none"/>
+
+<rect x="919" y="280" width="42" height="42" rx="10" fill="#488ee8" stroke="none"/>
+<text x="940" y="308" font-family="Helvetica,Arial,sans-serif" font-size="20" fill="white" font-weight="600" text-anchor="middle">A</text>
+<rect x="919" y="342" width="42" height="42" rx="10" fill="#eda23e" stroke="none"/>
+<text x="940" y="370" font-family="Helvetica,Arial,sans-serif" font-size="20" fill="white" font-weight="600" text-anchor="middle">B</text>
+<rect x="919" y="404" width="42" height="42" rx="10" fill="#7e6ec3" stroke="none"/>
+<text x="940" y="432" font-family="Helvetica,Arial,sans-serif" font-size="20" fill="white" font-weight="600" text-anchor="middle">C</text>
+<path d="M920 469 L960 469" stroke="#a7b4c6" stroke-width="1" fill="none"/>
+<rect x="919" y="487" width="42" height="42" rx="10" fill="#8aa2be" stroke="none"/>
+<text x="940" y="515" font-family="Helvetica,Arial,sans-serif" font-size="20" fill="white" font-weight="600" text-anchor="middle">F</text>
+<text x="994" y="249" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#243247" font-weight="700" text-anchor="start">Click</text>
+<text x="994" y="272" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#58687d" font-weight="400" text-anchor="start">Collapse / expand</text>
+<text x="994" y="318" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#243247" font-weight="700" text-anchor="start">Right-click</text>
+<text x="994" y="341" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#58687d" font-weight="400" text-anchor="start">Choose position</text>
+<text x="994" y="387" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#243247" font-weight="700" text-anchor="start">Drag</text>
+<text x="994" y="410" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#58687d" font-weight="400" text-anchor="start">Move along edges</text>
+<text x="896" y="598" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#58687d" font-weight="400" text-anchor="start">Optional bar; no extra handle outside the dock.</text>
+<text x="896" y="625" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#58687d" font-weight="400" text-anchor="start">Drag uses the existing repositioning lock.</text>
+<text x="896" y="652" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#58687d" font-weight="400" text-anchor="start">Collapsed: only the bar remains. Click to expand.</text>
+<rect x="28" y="718" width="1264" height="234" rx="10" fill="#fff" stroke="none"/>
+<text x="52" y="755" font-family="Helvetica,Arial,sans-serif" font-size="23" fill="#243247" font-weight="700" text-anchor="start">Running first. Pinned stays anchored. No screen-edge gap.</text>
+<rect x="54" y="783" width="128" height="145" rx="6" fill="#eef2f7" stroke="#b5c2d1"/>
+<rect x="54" y="858" width="30" height="70" rx="4" fill="#d8e2ee" stroke="#8b9eb5"/>
+<rect x="61" y="863" width="16" height="3" rx="1" fill="#6c819a" stroke="none"/>
+<rect x="61" y="872" width="16" height="16" rx="4" fill="#8d7acb" stroke="none"/>
+<path d="M59 886 L79 886" stroke="#a7b4c6" stroke-width="1" fill="none"/>
+<rect x="61" y="892" width="16" height="16" rx="4" fill="#458ce9" stroke="none"/>
+<rect x="61" y="911" width="16" height="12" rx="3" fill="#e6a246" stroke="none"/>
+<text x="95" y="915" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#34649d" font-weight="600" text-anchor="start">Pinned</text>
+<rect x="232" y="783" width="128" height="145" rx="6" fill="#eef2f7" stroke="#b5c2d1"/>
+<rect x="232" y="833" width="30" height="95" rx="4" fill="#d8e2ee" stroke="#8b9eb5"/>
+<rect x="239" y="838" width="16" height="3" rx="1" fill="#6c819a" stroke="none"/>
+<rect x="239" y="847" width="16" height="16" rx="4" fill="#8d7acb" stroke="none"/>
+<rect x="239" y="869" width="16" height="16" rx="4" fill="#8d7acb" stroke="none"/>
+<path d="M237 886 L257 886" stroke="#a7b4c6" stroke-width="1" fill="none"/>
+<rect x="239" y="892" width="16" height="16" rx="4" fill="#458ce9" stroke="none"/>
+<rect x="239" y="911" width="16" height="12" rx="3" fill="#e6a246" stroke="none"/>
+<text x="273" y="915" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#34649d" font-weight="600" text-anchor="start">Pinned</text>
+<text x="400" y="802" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#243247" font-weight="400" text-anchor="start">First section: unpinned running apps, growing above the pinned block.</text>
+<text x="400" y="835" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#243247" font-weight="400" text-anchor="start">Second section: pinned apps in a stable order. Files and Trash remain after them.</text>
+<text x="400" y="868" font-family="Helvetica,Arial,sans-serif" font-size="15" fill="#58687d" font-weight="400" text-anchor="start">Example: bottom-left vertical. New running apps extend the dock upward.</text>
+<text x="400" y="901" font-family="Helvetica,Arial,sans-serif" font-size="15" fill="#58687d" font-weight="400" text-anchor="start">The dock background touches the chosen screen edge; icon padding stays inside.</text>
+<text x="400" y="928" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#58687d" font-weight="400" text-anchor="start">The window-level repair is verified; desktop edge tiling still needs a manual check.</text>
+<circle cx="930" cy="246" r="1.5" fill="#6c819a"/>
+<circle cx="930" cy="251" r="1.5" fill="#6c819a"/>
+<circle cx="940" cy="246" r="1.5" fill="#6c819a"/>
+<circle cx="940" cy="251" r="1.5" fill="#6c819a"/>
+<circle cx="950" cy="246" r="1.5" fill="#6c819a"/>
+<circle cx="950" cy="251" r="1.5" fill="#6c819a"/>
+<text x="1010" y="488" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#58687d">Collapsed · only the bar</text>
+<rect x="1038" y="507" width="66" height="38" rx="9" fill="#dfe6ef" stroke="#a7b5c6"/>
+<circle cx="1060" cy="522" r="2" fill="#6c819a"/>
+<circle cx="1060" cy="530" r="2" fill="#6c819a"/>
+<circle cx="1071" cy="522" r="2" fill="#6c819a"/>
+<circle cx="1071" cy="530" r="2" fill="#6c819a"/>
+<circle cx="1082" cy="522" r="2" fill="#6c819a"/>
+<circle cx="1082" cy="530" r="2" fill="#6c819a"/>
+</svg>

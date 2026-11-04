@@ -45,7 +45,7 @@ final class WindowPreviewWindowController: NSWindowController, ObservableObject 
         window.level = .mainMenu
         window.backgroundColor = .clear
         window.isOpaque = false
-        window.hasShadow = false
+        window.hasShadow = true
         super.init(window: window)
     }
 
@@ -137,6 +137,7 @@ final class WindowPreviewWindowController: NSWindowController, ObservableObject 
 
         window.contentView = hostingView
         window.setFrame(initialFrame, display: false)
+        window.invalidateShadow()
         window.alphaValue = 0
         window.orderFront(nil)
 
@@ -334,25 +335,13 @@ private struct WindowPreviewWindowContent: View {
 private struct WindowPreviewView: View {
     @ObservedObject private var preview = WindowPreviewService.shared
 
-    // 1:1 mirror of WindowSwitcherOverlayView's chrome geometry so the two
-    // presentations stay visually coherent. Same constants, same formula.
-    private let innerPreviewCornerRadius: CGFloat = 16
-    private let cardPadding: CGFloat = 12
-    private let containerPadding: CGFloat = 18
+    @Bindable private var appearance = PreviewAppearancePreferences.shared
     private let interiorPadding: CGFloat = 8
 
-    private var cardCornerRadius: CGFloat {
-        innerPreviewCornerRadius + cardPadding
-    }
-    private var containerCornerRadius: CGFloat {
-        cardCornerRadius + containerPadding
-    }
-    private var edgeContentCornerRadius: CGFloat {
-        max(0, containerCornerRadius - interiorPadding)
-    }
-    private var innerContentCornerRadius: CGFloat {
-        edgeContentCornerRadius / 2
-    }
+    private var innerPreviewCornerRadius: CGFloat { appearance.cornerStyle.radius }
+    private var containerCornerRadius: CGFloat { appearance.cornerStyle.radius }
+    private var edgeContentCornerRadius: CGFloat { appearance.cornerStyle.radius }
+    private var innerContentCornerRadius: CGFloat { appearance.cornerStyle.radius }
 
     var body: some View {
         // Empty state intentionally renders nothing — the controller never
@@ -371,7 +360,7 @@ private struct WindowPreviewView: View {
     private var thumbnailLayout: some View {
         ScrollViewReader { scrollProxy in
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 18) {
+                HStack(spacing: 6) {
                     ForEach(Array(preview.windows.enumerated()), id: \.element.id) { index, window in
                         let total = preview.windows.count
                         let isFirst = index == 0
@@ -392,9 +381,14 @@ private struct WindowPreviewView: View {
             }
             .frame(maxWidth: 720)
             .fixedSize(horizontal: true, vertical: true)
-            .background(.primary.opacity(0.18))
+            .background(Color(nsColor: .windowBackgroundColor).opacity(0.94))
             .background(.ultraThinMaterial)
             .clipShape(RoundedRectangle(cornerRadius: containerCornerRadius, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: containerCornerRadius, style: .continuous)
+                    .strokeBorder(Color.primary.opacity(0.24), lineWidth: 1)
+                    .allowsHitTesting(false)
+            }
             .onChange(of: preview.selectedWindowIdentifier) { selection in
                 guard let selection else { return }
                 withAnimation(.easeInOut(duration: 0.14)) {
@@ -406,7 +400,7 @@ private struct WindowPreviewView: View {
 
     private var listLayout: some View {
         WindowPreviewListView(
-            cornerRadius: 16,
+            cornerRadius: containerCornerRadius,
             interiorPadding: interiorPadding
         )
     }
@@ -443,30 +437,20 @@ private struct WindowPreviewCard: View {
         VStack(spacing: 12) {
             previewSurface
 
-            VStack(spacing: 4) {
-                Text(window.windowTitle)
-                    .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(.primary.opacity(0.96))
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                    .opacity(isSelected ? 1 : 0.25)
-
-                Text(window.appDisplayName)
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(.primary.opacity(0.6))
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                    .opacity(isSelected ? 1 : 0.12)
-            }
-            .frame(width: previewWidth)
+            Text(window.windowTitle)
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundStyle(.primary)
+                .lineLimit(1)
+                .truncationMode(.tail)
+                .frame(width: previewWidth)
         }
         .padding(12)
         .background {
             cardShape
-                .fill(isSelected ? .white.opacity(0.14) : .white.opacity(0))
+                .fill(isSelected ? Color.accentColor.opacity(0.14) : Color.clear)
                 .overlay {
                     cardShape
-                        .strokeBorder(isSelected ? .white.opacity(0.28) : .white.opacity(0), lineWidth: 1)
+                        .strokeBorder(isSelected ? Color.accentColor : Color.primary.opacity(0.13), lineWidth: isSelected ? 2 : 1)
                 }
         }
         .background {
@@ -474,6 +458,16 @@ private struct WindowPreviewCard: View {
                 actionProvider: contextActions(modifierFlags:),
                 onPresentationChanged: preview.setContextMenuPresented
             )
+        }
+        .overlay(alignment: .bottomTrailing) {
+            if isSelected {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 12, weight: .semibold))
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(.white, Color.accentColor)
+                    .padding(5)
+                    .allowsHitTesting(false)
+            }
         }
         .contentShape(cardShape)
         .onHover { isHovering in
@@ -510,7 +504,7 @@ private struct WindowPreviewCard: View {
         // matching the switcher card treatment.
         .saturation(window.isMinimized ? 0 : 1)
         .opacity(window.isMinimized ? 0.7 : 1)
-        .clipShape(RoundedRectangle(cornerRadius: innerPreviewCornerRadius / 4, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: innerPreviewCornerRadius, style: .continuous))
         .overlay {
             if window.isMinimized {
                 Image(systemName: "minus.diamond.fill")
@@ -581,20 +575,20 @@ private struct WindowPreviewListView: View {
     @ObservedObject private var preview = WindowPreviewService.shared
 
     private let listWidth: CGFloat = 360
-    private let rowHeight: CGFloat = 52
+    private let rowHeight: CGFloat = 40
     private let maxVisibleRows: Int = 8
 
     private var edgeRowCornerRadius: CGFloat {
-        max(0, cornerRadius - interiorPadding)
+        cornerRadius
     }
     private var innerRowCornerRadius: CGFloat {
-        edgeRowCornerRadius / 2
+        cornerRadius
     }
 
     var body: some View {
         ScrollViewReader { scrollProxy in
             ScrollView(.vertical, showsIndicators: false) {
-                LazyVStack(spacing: 2) {
+                LazyVStack(spacing: 6) {
                     ForEach(Array(preview.windows.enumerated()), id: \.element.id) { index, window in
                         let total = preview.windows.count
                         let isFirst = index == 0
@@ -614,11 +608,16 @@ private struct WindowPreviewListView: View {
                 .padding(interiorPadding)
             }
             .frame(width: listWidth)
-            .frame(maxHeight: CGFloat(maxVisibleRows) * rowHeight + 16)
+            .frame(maxHeight: CGFloat(maxVisibleRows) * rowHeight + CGFloat(maxVisibleRows - 1) * 6 + interiorPadding * 2)
             .fixedSize(horizontal: true, vertical: true)
-            .background(.primary.opacity(0.18))
+            .background(Color(nsColor: .windowBackgroundColor).opacity(0.94))
             .background(.ultraThinMaterial)
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .strokeBorder(Color.primary.opacity(0.24), lineWidth: 1)
+                    .allowsHitTesting(false)
+            }
             .onChange(of: preview.selectedWindowIdentifier) { selection in
                 guard let selection else { return }
                 withAnimation(.easeInOut(duration: 0.14)) {
@@ -660,20 +659,18 @@ private struct WindowPreviewListRow: View {
                 .interpolation(.high)
                 .frame(width: iconSize, height: iconSize)
 
-            VStack(alignment: .leading, spacing: 2) {
-                Text(window.windowTitle)
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(.primary.opacity(isSelected ? 1 : 0.85))
-                    .lineLimit(1)
-                    .truncationMode(.middle)
+            Text(window.windowTitle)
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(.primary)
+                .lineLimit(1)
+                .truncationMode(.middle)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
-                Text(window.appDisplayName)
-                    .font(.system(size: 11, weight: .medium))
-                    .foregroundStyle(.primary.opacity(isSelected ? 0.75 : 0.5))
-                    .lineLimit(1)
-                    .truncationMode(.tail)
+            if isSelected {
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundStyle(Color.accentColor)
+                    .accessibilityLabel("Selected window")
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
 
             if window.isMinimized {
                 Image(systemName: "minus.diamond.fill")
@@ -685,9 +682,9 @@ private struct WindowPreviewListRow: View {
         .frame(height: height)
         .background {
             rowShape
-                .fill(isSelected ? .white.opacity(0.16) : .clear)
+                .fill(isSelected ? Color.accentColor.opacity(0.14) : Color.clear)
                 .overlay {
-                    rowShape.strokeBorder(isSelected ? .white.opacity(0.28) : .clear, lineWidth: 1)
+                    rowShape.strokeBorder(isSelected ? Color.accentColor : Color.primary.opacity(0.13), lineWidth: isSelected ? 2 : 1)
                 }
         }
         .background {

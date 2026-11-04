@@ -16,6 +16,7 @@ struct TileContainerView: View {
     private let dockSettings = DockSettingsService.shared
     @ObservedObject private var layout = DockLayoutService.shared
     @Bindable private var preferences = DockyPreferences.shared
+    @Bindable private var placement = DockPlacementPreferences.shared
     @ObservedObject private var editMode = DockEditModeService.shared
     @ObservedObject private var dockDrag = DockDragService.shared
     private let magnificationState = TileMagnificationState.shared
@@ -38,8 +39,14 @@ struct TileContainerView: View {
 
         GeometryReader { proxy in
             overflowWrappedContent(in: proxy)
-            .onPreferenceChange(TileFramePreferenceKey.self) { tileFrames = $0 }
+            .onPreferenceChange(TileFramePreferenceKey.self) { frames in
+                tileFrames = frames
+                publishInteractiveFrames(frames)
+            }
             .onAppear { layout.setTileCanvasFrame(proxy.frame(in: .global)) }
+            .onChange(of: placement.displaysControlTile) { _ in
+                publishInteractiveFrames(tileFrames)
+            }
             .onChange(of: proxy.frame(in: .global)) { frame in
                 layout.setTileCanvasFrame(frame)
             }
@@ -140,11 +147,43 @@ struct TileContainerView: View {
     private func contentComponents(
         scrollableSectionLayout: ScrollableSectionLayout?
     ) -> some View {
-        let count = Double(layoutComponents.count)
-        ForEach(layoutComponents) { component in
-            componentView(component, scrollableSectionLayout: scrollableSectionLayout)
-                .zIndex(count - Double(component.index ?? 0))
+        if placement.displaysControlTile { dockControl }
+        if !placement.isCollapsed {
+            let count = Double(layoutComponents.count)
+            ForEach(layoutComponents) { component in
+                componentView(component, scrollableSectionLayout: scrollableSectionLayout)
+                    .zIndex(count - Double(component.index ?? 0))
+            }
         }
+    }
+
+    private var dockControl: some View {
+        DockControlTileView()
+            .frame(
+                width: position.isVertical ? tileHeight : controlBarLength,
+                height: position.isVertical ? controlBarLength : tileHeight
+            )
+            .background {
+                GeometryReader { proxy in
+                    Color.clear.preference(
+                        key: TileFramePreferenceKey.self,
+                        value: ["dock-control": proxy.frame(in: .global)]
+                    )
+                }
+            }
+    }
+
+    private func publishInteractiveFrames(_ frames: [String: CGRect]) {
+        let interactiveIDs = Set(store.tiles.compactMap { tile -> String? in
+            switch tile.content {
+            case .divider, .spacer, .flexibleSpacer: nil
+            default: tile.id
+            }
+        }).union(placement.displaysControlTile ? ["dock-control"] : [])
+        FloatingDockController.active?.updateInteractiveTileFrames(
+            frames.compactMap { interactiveIDs.contains($0.key) ? $0.value : nil },
+            controlFrame: placement.displaysControlTile ? frames["dock-control"] : nil
+        )
     }
 
     @ViewBuilder
@@ -298,47 +337,36 @@ struct TileContainerView: View {
     }
 
     private var displayTiles: [Tile] {
-        guard let firstTile = store.tiles.first else {
-            return store.tiles
-        }
-
-        // Shelve mode drops the leading Finder tile, so the first store
-        // tile may be a regular pinned app — which is also surfaced via
-        // `previewPinnedTiles`. Only pin the first tile to the front when
-        // it actually is Finder; otherwise let the normal pinned-section
-        // path render it once.
-        let leadsWithFinder = firstTile.id == "pinned:com.apple.finder"
         var result: [Tile] = []
-        if leadsWithFinder {
-            result.append(firstTile)
-        }
-        result.append(contentsOf: previewPinnedTiles)
+        var appendedPinnedSection = false
         var appendedTrailingSection = false
-
-        let remainingTiles: ArraySlice<Tile> = leadsWithFinder
-            ? store.tiles.dropFirst()
-            : store.tiles[...]
-        for tile in remainingTiles {
-            if appendedTrailingSection {
+        for tile in store.tiles {
+            if appendedTrailingSection { continue }
+            if groupedOpenedAppFolderID(for: tile.id) != nil { continue }
+            if tile.id == "pinned:com.apple.finder" {
+                result.append(tile)
+                result.append(contentsOf: previewPinnedTiles)
+                appendedPinnedSection = true
                 continue
             }
-
-            if groupedOpenedAppFolderID(for: tile.id) != nil {
-                continue
-            }
-
             if tile.id == "divider:trailing" {
+                if !appendedPinnedSection {
+                    result.append(contentsOf: previewPinnedTiles)
+                    appendedPinnedSection = true
+                }
                 result.append(tile)
                 result.append(contentsOf: previewTrailingSectionTiles)
                 appendedTrailingSection = true
                 continue
             }
-
-            if isPinnedReorderable(tileID: tile.id)
-                || isTrailingReorderable(tileID: tile.id) {
+            if isPinnedReorderable(tileID: tile.id) {
+                if !appendedPinnedSection {
+                    result.append(contentsOf: previewPinnedTiles)
+                    appendedPinnedSection = true
+                }
                 continue
             }
-            result.append(tile)
+            if !isTrailingReorderable(tileID: tile.id) { result.append(tile) }
         }
 
         // Theme-level layout insertions apply after the editor-preview
@@ -684,7 +712,7 @@ struct TileContainerView: View {
             if tile.id == "divider:running" || tile.id == "divider:trailing" {
                 appendCurrentSection()
                 components.append(.divider(tile))
-                currentSectionID = tile.id == "divider:running" ? "running" : "trailing"
+                currentSectionID = tile.id == "divider:running" ? "pinned" : "trailing"
                 continue
             }
 
@@ -738,11 +766,21 @@ struct TileContainerView: View {
     }
 
     private func totalAxisLength(for components: [TileLayoutComponent]) -> CGFloat {
+        if placement.isCollapsed { return controlBarLength + effectiveEdgePadding * 2 }
         let componentLengths = components.reduce(CGFloat(0)) { partialResult, component in
             partialResult + axisLength(of: component)
         }
         let spacings = CGFloat(max(0, components.count - 1)) * effectiveTileSpacing
         return componentLengths + spacings + effectiveEdgePadding * 2
+            + controlAxisLength(componentCount: components.count)
+    }
+
+    private var controlBarLength: CGFloat { DockPlacementPreferences.controlAxisLength(tileSize: effectiveTileSize) }
+
+    private func controlAxisLength(componentCount: Int) -> CGFloat {
+        placement.displaysControlTile
+            ? controlBarLength + (componentCount > 0 ? effectiveTileSpacing : 0)
+            : 0
     }
 
     private func scrollableSectionAxisLength(
@@ -750,7 +788,8 @@ struct TileContainerView: View {
         in components: [TileLayoutComponent],
         availableAxisLength: CGFloat
     ) -> CGFloat {
-        let innerAvailableAxisLength = max(0, availableAxisLength - effectiveEdgePadding * 2)
+        let innerAvailableAxisLength = max(0, availableAxisLength - effectiveEdgePadding * 2
+            - controlAxisLength(componentCount: components.count))
         let spacings = CGFloat(max(0, components.count - 1)) * effectiveTileSpacing
         let fixedAxisLength = components.reduce(CGFloat(0)) { partialResult, component in
             switch component {
@@ -900,6 +939,7 @@ struct TileContainerView: View {
     /// cursor-to-tile mapping unreliable.
     private func magnificationContext(centersContent: Bool) -> TileMagnificationState.Context? {
         guard dockSettings.magnification,
+              !placement.isCollapsed,
               !editMode.isActive,
               draggedTileID == nil,
               dockSettings.largeSize > dockSettings.tileSize else {
@@ -924,7 +964,11 @@ struct TileContainerView: View {
             position.isVertical ? size.height : size.width
         }
 
-        let items = tiles.map { tile in
+        let controlCount = placement.displaysControlTile ? 1 : 0
+        let controlItems = placement.displaysControlTile ? [DockMagnificationLayout.Item(
+            id: "dock-control", restExtent: controlBarLength, magnifies: false
+        )] : []
+        let items = controlItems + tiles.map { tile in
             DockMagnificationLayout.Item(
                 id: tile.id,
                 restExtent: projectedExtent(Self.size(
@@ -955,8 +999,10 @@ struct TileContainerView: View {
             restIconSize: restIconSize,
             maxIconSize: dockSettings.largeSize,
             magnifiedExtent: { index, iconSize in
-                projectedExtent(Self.size(
-                    for: tiles[index],
+                let tileIndex = index - controlCount
+                guard tiles.indices.contains(tileIndex) else { return restIconSize }
+                return projectedExtent(Self.size(
+                    for: tiles[tileIndex],
                     tileSize: iconSize,
                     tileHeight: iconSize + (restTileHeight - restIconSize),
                     tileSpacing: spacing,
@@ -1606,25 +1652,30 @@ struct TileContainerView: View {
             return false
         }
 
+        let emptyPinnedSection = pinnedTiles.isEmpty && tileFrames["pinned:com.apple.finder"] == nil
         let upperBound = projected(point: trailingBoundaryFrame.origin)
+            + (emptyPinnedSection ? projected(size: trailingBoundaryFrame.size) : 0)
         return positionValue >= lowerBound && positionValue <= upperBound
     }
 
-    /// Leading edge of the pinned drop region. Normally this is the trailing
-    /// edge of the fixed Finder fixture, so drops never land before it. Shelve
-    /// mode can hide the Finder tile, in which case there's nothing to anchor
-    /// against, so fall back to the dock's leading content edge. Without this
-    /// fallback the whole pinned section becomes undroppable (issue #13).
+    /// Start after Finder or the running-app divider so running apps never
+    /// become part of the pinned reorder region. With Finder hidden and no
+    /// pinned apps, the trailing divider remains an insertion target.
     private var pinnedDropRegionLowerBound: CGFloat? {
         if let finderFrame = tileFrames["pinned:com.apple.finder"] {
             return projected(point: finderFrame.origin) + projected(size: finderFrame.size)
         }
-        return tileFrames.values.map { projected(point: $0.origin) }.min()
+        if let dividerFrame = tileFrames["divider:running"] {
+            return projected(point: dividerFrame.origin) + projected(size: dividerFrame.size)
+        }
+        if let firstPinned = pinnedTiles.first, let frame = tileFrames[firstPinned.id] {
+            return projected(point: frame.origin) - effectiveTileSpacing / 2
+        }
+        // With no pinned items, allow insertion at the trailing divider.
+        return tileFrames["divider:trailing"].map { projected(point: $0.origin) }
     }
 
-    private var pinnedTrailingBoundaryTileID: String {
-        tileFrames.keys.contains("divider:running") ? "divider:running" : "divider:trailing"
-    }
+    private var pinnedTrailingBoundaryTileID: String { "divider:trailing" }
 
     private func isPointInTrailingDropRegion(_ positionValue: CGFloat) -> Bool {
         guard let dividerFrame = tileFrames["divider:trailing"] else {
@@ -1938,12 +1989,18 @@ struct TileContainerView: View {
         tileSpacing: CGFloat,
         position: ResolvedDockWindowPosition,
         compactWidgets: Bool = false,
-        edgePadding: CGFloat = Self.edgePadding
+        edgePadding: CGFloat = Self.edgePadding,
+        includesDockControl: Bool = false
     ) -> CGSize {
-        let sizes = tiles.map {
+        var sizes = tiles.map {
             size(for: $0, tileSize: tileSize, tileHeight: tileHeight, tileSpacing: tileSpacing, position: position, compactWidgets: compactWidgets)
         }
-        let spacings = max(0, CGFloat(tiles.count) - 1) * tileSpacing
+        if includesDockControl {
+            sizes.insert(position.isVertical
+                ? CGSize(width: tileHeight, height: DockPlacementPreferences.controlAxisLength(tileSize: tileSize))
+                : CGSize(width: DockPlacementPreferences.controlAxisLength(tileSize: tileSize), height: tileHeight), at: 0)
+        }
+        let spacings = max(0, CGFloat(sizes.count) - 1) * tileSpacing
 
         if position.isVertical {
             let height = sizes.reduce(CGFloat(0)) { $0 + $1.height } + spacings + edgePadding * 2

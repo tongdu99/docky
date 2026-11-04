@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="540" viewBox="0 0 1040 540"><title>Docky preview contrast and transparent dotted bar proposal</title><defs><filter id="shade" x="-20%" y="-35%" width="140%" height="180%"><feDropShadow dx="0" dy="7" stdDeviation="9" flood-color="#15263b" flood-opacity=".22"/></filter></defs><rect width="1040" height="540" fill="#f4f6fa"/>
+<text x="30" y="34" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#2569c8" font-weight="700">REVISION 5 · UI REVIEW</text>
+<text x="30" y="72" font-family="Helvetica,Arial,sans-serif" font-size="27" fill="#243247" font-weight="700">Clear preview edges. Dots on the dock material.</text>
+<rect x="24" y="94" width="992" height="390" rx="6" fill="#fff" stroke="none" />
+<text x="48" y="127" font-family="Helvetica,Arial,sans-serif" font-size="18" fill="#243247" font-weight="600">Preview on a white application window</text>
+<rect x="48" y="148" width="940" height="270" rx="6" fill="#fff" stroke="#e3e7ed" />
+<rect x="75" y="178" width="110" height="6" rx="2" fill="#e8ecf1" stroke="none" />
+<rect x="75" y="205" width="110" height="6" rx="2" fill="#e8ecf1" stroke="none" />
+<rect x="75" y="232" width="110" height="6" rx="2" fill="#e8ecf1" stroke="none" />
+<rect x="285" y="168" width="1" height="220" rx="0" fill="#eef1f6" stroke="none" />
+<rect x="465" y="168" width="1" height="220" rx="0" fill="#eef1f6" stroke="none" />
+<rect x="645" y="168" width="1" height="220" rx="0" fill="#eef1f6" stroke="none" />
+<rect x="825" y="168" width="1" height="220" rx="0" fill="#eef1f6" stroke="none" />
+<rect x="53" y="158" width="48" height="228" rx="9" fill="#dce5ef" stroke="#96a5b8" />
+<circle cx="70" cy="170" r="1.2" fill="#697b91"/>
+<circle cx="70" cy="176" r="1.2" fill="#697b91"/>
+<circle cx="77" cy="170" r="1.2" fill="#697b91"/>
+<circle cx="77" cy="176" r="1.2" fill="#697b91"/>
+<circle cx="84" cy="170" r="1.2" fill="#697b91"/>
+<circle cx="84" cy="176" r="1.2" fill="#697b91"/>
+<rect x="62" y="190" width="30" height="34" rx="8" fill="#3789e6" stroke="none" />
+<text x="70" y="214" font-family="Helvetica,Arial,sans-serif" font-size="18" fill="white" font-weight="600">A</text>
+<rect x="62" y="237" width="30" height="34" rx="8" fill="#e9a33d" stroke="none" />
+<text x="70" y="261" font-family="Helvetica,Arial,sans-serif" font-size="18" fill="white" font-weight="600">B</text>
+<rect x="62" y="284" width="30" height="34" rx="8" fill="#66a58e" stroke="none" />
+<text x="70" y="308" font-family="Helvetica,Arial,sans-serif" font-size="18" fill="white" font-weight="600">C</text>
+<rect x="118" y="196" width="642" height="198" rx="6" fill="#fbfcfe" stroke="#9aa8bb" filter="url(#shade)"/>
+<rect x="128" y="206" width="302" height="178" rx="5" fill="#e9f1ff" stroke="#2677ed" stroke-width="2"/>
+<rect x="140" y="218" width="278" height="122" rx="2" fill="#fff" stroke="#d8dfe8" />
+<rect x="140" y="218" width="278" height="12" rx="2" fill="#e1e7ef" stroke="none" />
+<rect x="150" y="239" width="42" height="14" rx="2" fill="#d4e5fb" stroke="none" />
+<rect x="200" y="239" width="42" height="14" rx="2" fill="#d8eee3" stroke="none" />
+<rect x="250" y="239" width="42" height="14" rx="2" fill="#f8dfc8" stroke="none" />
+<rect x="300" y="239" width="42" height="14" rx="2" fill="#d4e5fb" stroke="none" />
+<rect x="350" y="239" width="42" height="14" rx="2" fill="#d8eee3" stroke="none" />
+<rect x="150" y="261" width="42" height="14" rx="2" fill="#d8eee3" stroke="none" />
+<rect x="200" y="261" width="42" height="14" rx="2" fill="#f8dfc8" stroke="none" />
+<rect x="250" y="261" width="42" height="14" rx="2" fill="#d4e5fb" stroke="none" />
+<rect x="300" y="261" width="42" height="14" rx="2" fill="#d8eee3" stroke="none" />
+<rect x="350" y="261" width="42" height="14" rx="2" fill="#f8dfc8" stroke="none" />
+<rect x="150" y="283" width="42" height="14" rx="2" fill="#f8dfc8" stroke="none" />
+<rect x="200" y="283" width="42" height="14" rx="2" fill="#d4e5fb" stroke="none" />
+<rect x="250" y="283" width="42" height="14" rx="2" fill="#d8eee3" stroke="none" />
+<rect x="300" y="283" width="42" height="14" rx="2" fill="#f8dfc8" stroke="none" />
+<rect x="350" y="283" width="42" height="14" rx="2" fill="#d4e5fb" stroke="none" />
+<rect x="150" y="305" width="42" height="14" rx="2" fill="#d4e5fb" stroke="none" />
+<rect x="200" y="305" width="42" height="14" rx="2" fill="#d8eee3" stroke="none" />
+<rect x="250" y="305" width="42" height="14" rx="2" fill="#f8dfc8" stroke="none" />
+<rect x="300" y="305" width="42" height="14" rx="2" fill="#d4e5fb" stroke="none" />
+<rect x="350" y="305" width="42" height="14" rx="2" fill="#d8eee3" stroke="none" />
+<text x="141" y="368" font-family="Helvetica,Arial,sans-serif" font-size="15" fill="#26354a" font-weight="600">Calendar · Week</text>
+<circle cx="412" cy="365" r="7" fill="#2677ed"/>
+<text x="408" y="369" font-family="Helvetica,Arial,sans-serif" font-size="11" fill="white" font-weight="700">✓</text>
+<rect x="440" y="206" width="302" height="178" rx="5" fill="#f8fafc" stroke="#c5cdd8" />
+<rect x="452" y="218" width="278" height="122" rx="2" fill="#fff" stroke="#d8dfe8" />
+<rect x="452" y="218" width="278" height="12" rx="2" fill="#e1e7ef" stroke="none" />
+<rect x="462" y="239" width="42" height="14" rx="2" fill="#d4e5fb" stroke="none" />
+<rect x="512" y="239" width="42" height="14" rx="2" fill="#d8eee3" stroke="none" />
+<rect x="562" y="239" width="42" height="14" rx="2" fill="#f8dfc8" stroke="none" />
+<rect x="612" y="239" width="42" height="14" rx="2" fill="#d4e5fb" stroke="none" />
+<rect x="662" y="239" width="42" height="14" rx="2" fill="#d8eee3" stroke="none" />
+<rect x="462" y="261" width="42" height="14" rx="2" fill="#d8eee3" stroke="none" />
+<rect x="512" y="261" width="42" height="14" rx="2" fill="#f8dfc8" stroke="none" />
+<rect x="562" y="261" width="42" height="14" rx="2" fill="#d4e5fb" stroke="none" />
+<rect x="612" y="261" width="42" height="14" rx="2" fill="#d8eee3" stroke="none" />
+<rect x="662" y="261" width="42" height="14" rx="2" fill="#f8dfc8" stroke="none" />
+<rect x="462" y="283" width="42" height="14" rx="2" fill="#f8dfc8" stroke="none" />
+<rect x="512" y="283" width="42" height="14" rx="2" fill="#d4e5fb" stroke="none" />
+<rect x="562" y="283" width="42" height="14" rx="2" fill="#d8eee3" stroke="none" />
+<rect x="612" y="283" width="42" height="14" rx="2" fill="#f8dfc8" stroke="none" />
+<rect x="662" y="283" width="42" height="14" rx="2" fill="#d4e5fb" stroke="none" />
+<rect x="462" y="305" width="42" height="14" rx="2" fill="#d4e5fb" stroke="none" />
+<rect x="512" y="305" width="42" height="14" rx="2" fill="#d8eee3" stroke="none" />
+<rect x="562" y="305" width="42" height="14" rx="2" fill="#f8dfc8" stroke="none" />
+<rect x="612" y="305" width="42" height="14" rx="2" fill="#d4e5fb" stroke="none" />
+<rect x="662" y="305" width="42" height="14" rx="2" fill="#d8eee3" stroke="none" />
+<text x="453" y="368" font-family="Helvetica,Arial,sans-serif" font-size="15" fill="#26354a" font-weight="600">Home · Browser</text>
+<text x="784" y="238" font-family="Helvetica,Arial,sans-serif" font-size="15" fill="#243247" font-weight="700">Outer panel</text>
+<text x="784" y="261" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#58687d" font-weight="400">Fine border + soft shadow</text>
+<text x="784" y="300" font-family="Helvetica,Arial,sans-serif" font-size="15" fill="#243247" font-weight="700">Unselected cards</text>
+<text x="784" y="323" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#58687d" font-weight="400">Subtle neutral outline</text>
+<text x="48" y="453" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#58687d" font-weight="400">Dotted bar: transparent background, so the dock’s material shows through in light and dark mode.</text>
+<text x="30" y="515" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#58687d" font-weight="400">Existing corner-style setting and blue selection highlight stay in place.</text>
+</svg>

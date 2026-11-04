@@ -3,8 +3,8 @@
 //  Docky
 //
 //  Composes the visible dock tile row from three sources:
-//    - `persistent-apps`   → pinned apps + spacers (left section)
-//    - running apps that aren't pinned → injected between pinned and folders
+//    - running apps that aren't pinned → leading, growing section
+//    - `persistent-apps`   → Finder + pinned apps + spacers (stable second section)
 //    - `persistent-others` → folders + spacers (right section)
 //
 //  Refresh signals: dock plist change and workspace running-apps changes.
@@ -2227,17 +2227,20 @@ final class TileStore: ObservableObject {
         let minimizedWindowTiles = preferences.showsMinimizedWindows
             ? WorkspaceService.shared.minimizedWindows.map(Self.tile(for:))
             : []
-        let mergedPinnedTiles = preferences.effectiveShowsActivePinnedSeparator
-            ? pinnedWithoutFinder
-            : pinnedWithoutFinder + runningTiles
-
         let leadingFinder: [Tile] = hidesFinder ? [] : [Self.finderTile()]
-        var result: [Tile] = tilesWithWidgets(appendedTo: leadingFinder)
-        result.append(contentsOf: tilesWithWidgets(appendedTo: mergedPinnedTiles))
-        if preferences.effectiveShowsActivePinnedSeparator, !runningTiles.isEmpty {
-            result.append(Tile(id: "divider:running", content: .divider))
-            result.append(contentsOf: tilesWithWidgets(appendedTo: runningTiles))
-        }
+        let runningSection = tilesWithWidgets(appendedTo: runningTiles)
+        let pinnedSection = tilesWithWidgets(appendedTo: leadingFinder + pinnedWithoutFinder)
+        // Running apps grow before the pinned block, so a bottom-anchored dock
+        // expands upward without moving the pinned apps or trailing fixtures.
+        // Retain the structural separator ID used by themes and drag layout.
+        let runningSeparator: Tile? = preferences.effectiveShowsActivePinnedSeparator
+            ? Tile(id: "divider:running", content: .divider)
+            : nil
+        var result = DockAppSectionOrder.compose(
+            running: runningSection,
+            pinned: pinnedSection,
+            separator: runningSeparator
+        )
         result.append(Tile(id: "divider:trailing", content: .divider))
         let trailing = trailingTiles(withInsertedMinimizedWindows: minimizedWindowTiles)
         result.append(contentsOf: hidesTrash ? trailing.filter { !Self.isTrash($0) } : trailing)

@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="1070" viewBox="0 0 1320 1070" role="img">
+<title>Docky interface proposal for review</title>
+<defs><filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="8" stdDeviation="13" flood-color="#182638" flood-opacity=".12"/></filter></defs>
+<rect x="0" y="0" width="1320" height="1070" rx="0" fill="#f4f7fb" stroke="none" stroke-width="1" />
+<rect x="36" y="20" width="352.0" height="26" rx="7" fill="#eaf1ff" stroke="none" stroke-width="1" />
+<text x="47" y="38" fill="#205bb7" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" text-anchor="start">REVISION 3 · UI REVIEW BEFORE IMPLEMENTATION</text>
+<text x="36" y="86" fill="#192536" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="30" font-weight="700" text-anchor="start">Optional controls. Positions that match the dock.</text>
+<text x="36" y="116" fill="#536278" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="17" font-weight="400" text-anchor="start">Drag empty areas and dividers. Keep the dock clear of controls you do not need.</text>
+<rect x="28" y="142" width="1264" height="224" rx="12" fill="#fff" stroke="none" stroke-width="1" />
+<text x="52" y="178" fill="#192536" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="21" font-weight="650" text-anchor="start">Dock control tile · optional</text>
+<text x="52" y="207" fill="#192536" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="16" font-weight="550" text-anchor="start">Show Dock Controls in the dock</text>
+<rect x="526" y="190" width="36" height="22" rx="11" fill="#c4cdd8" stroke="none" stroke-width="1" />
+<circle cx="537" cy="201" r="8" fill="white"/>
+<text x="52" y="234" fill="#536278" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="400" text-anchor="start">Off: no control tile. Placement and orientation remain in Settings.</text>
+<text x="52" y="268" fill="#192536" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="550" text-anchor="start">Optional icon</text>
+<rect x="52" y="282" width="172" height="40" rx="6" fill="#f3f5f9" stroke="#d6dee8" stroke-width="1" />
+<text x="138" y="307" fill="#30465f" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="500" text-anchor="middle">Choose image…</text>
+<text x="242" y="308" fill="#536278" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="400" text-anchor="start">Default: monitor + dock glyph</text>
+<rect x="630" y="185" width="330" height="64" rx="10" fill="#d9e0e8" stroke="#b9c4d0" stroke-width="1" />
+<rect x="644" y="197" width="40" height="40" rx="10" fill="#3b8df3" stroke="none" stroke-width="1" />
+<text x="664" y="224" fill="#fff" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="22" font-weight="600" text-anchor="middle">F</text>
+<rect x="692" y="197" width="40" height="40" rx="10" fill="#eaa343" stroke="none" stroke-width="1" />
+<text x="712" y="224" fill="#fff" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="22" font-weight="600" text-anchor="middle">C</text>
+<rect x="765" y="197" width="40" height="40" rx="10" fill="#64aa91" stroke="none" stroke-width="1" />
+<text x="785" y="224" fill="#fff" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="22" font-weight="600" text-anchor="middle">S</text>
+<rect x="813" y="197" width="40" height="40" rx="10" fill="#8e7bce" stroke="none" stroke-width="1" />
+<text x="833" y="224" fill="#fff" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="22" font-weight="600" text-anchor="middle">M</text>
+<line x1="750" y1="197" x2="750" y2="237" stroke="#aab7c6" stroke-width="1" stroke-linecap="round" stroke-dasharray=""/>
+<text x="630" y="278" fill="#192536" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="15" font-weight="600" text-anchor="start">Normal dock · no control tile</text>
+<text x="630" y="307" fill="#536278" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="400" text-anchor="start">Dragging from gaps works with the tile hidden.</text>
+<text x="52" y="346" fill="#63748b" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="13" font-weight="400" text-anchor="start">When collapsed, a temporary Expand control remains available so the dock can always be restored.</text>
+<rect x="28" y="382" width="624" height="340" rx="12" fill="#fff" stroke="none" stroke-width="1" />
+<text x="52" y="419" fill="#192536" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="21" font-weight="650" text-anchor="start">Vertical · six presets</text>
+<text x="52" y="447" fill="#536278" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="400" text-anchor="start">Top / middle / bottom on either side.</text>
+<rect x="52" y="466" width="282" height="36" rx="6" fill="#f3f5f9" stroke="#d6dee8" stroke-width="1" />
+<rect x="54" y="468" width="138" height="32" rx="5" fill="#fff" stroke="#cbd6e5" stroke-width="1" />
+<text x="124" y="489" fill="#276be0" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" text-anchor="middle">Vertical</text>
+<text x="264" y="489" fill="#63748b" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="13" font-weight="400" text-anchor="middle">Horizontal</text>
+<rect x="52" y="520" width="282" height="170" rx="8" fill="#edf2f8" stroke="#c9d4e0" stroke-width="1" />
+<rect x="61" y="528" width="20" height="36" rx="4" fill="#c4d7f4" stroke="none" stroke-width="1" />
+<circle cx="71" cy="536" r="2" fill="#fff"/>
+<circle cx="71" cy="544" r="2" fill="#fff"/>
+<circle cx="71" cy="552" r="2" fill="#fff"/>
+<rect x="61" y="587" width="20" height="36" rx="4" fill="#c4d7f4" stroke="none" stroke-width="1" />
+<circle cx="71" cy="595" r="2" fill="#fff"/>
+<circle cx="71" cy="603" r="2" fill="#fff"/>
+<circle cx="71" cy="611" r="2" fill="#fff"/>
+<rect x="61" y="646" width="20" height="36" rx="4" fill="#2674e8" stroke="none" stroke-width="1" />
+<circle cx="71" cy="654" r="2" fill="#fff"/>
+<circle cx="71" cy="662" r="2" fill="#fff"/>
+<circle cx="71" cy="670" r="2" fill="#fff"/>
+<rect x="305" y="528" width="20" height="36" rx="4" fill="#c4d7f4" stroke="none" stroke-width="1" />
+<circle cx="315" cy="536" r="2" fill="#fff"/>
+<circle cx="315" cy="544" r="2" fill="#fff"/>
+<circle cx="315" cy="552" r="2" fill="#fff"/>
+<rect x="305" y="587" width="20" height="36" rx="4" fill="#c4d7f4" stroke="none" stroke-width="1" />
+<circle cx="315" cy="595" r="2" fill="#fff"/>
+<circle cx="315" cy="603" r="2" fill="#fff"/>
+<circle cx="315" cy="611" r="2" fill="#fff"/>
+<rect x="305" y="646" width="20" height="36" rx="4" fill="#c4d7f4" stroke="none" stroke-width="1" />
+<circle cx="315" cy="654" r="2" fill="#fff"/>
+<circle cx="315" cy="662" r="2" fill="#fff"/>
+<circle cx="315" cy="670" r="2" fill="#fff"/>
+<rect x="356" y="520" width="132" height="48" rx="6" fill="#f7f9fc" stroke="#d6dee8" stroke-width="1" />
+<text x="422.0" y="549" fill="#30465f" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle">Top left</text>
+<rect x="356" y="577" width="132" height="48" rx="6" fill="#f7f9fc" stroke="#d6dee8" stroke-width="1" />
+<text x="422.0" y="606" fill="#30465f" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle">Middle left</text>
+<rect x="356" y="634" width="132" height="48" rx="6" fill="#e8f1ff" stroke="#2674e8" stroke-width="2" />
+<text x="422.0" y="663" fill="#30465f" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="12" font-weight="550" text-anchor="middle">Bottom left</text>
+<rect x="499" y="520" width="132" height="48" rx="6" fill="#f7f9fc" stroke="#d6dee8" stroke-width="1" />
+<text x="565.0" y="549" fill="#30465f" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle">Top right</text>
+<rect x="499" y="577" width="132" height="48" rx="6" fill="#f7f9fc" stroke="#d6dee8" stroke-width="1" />
+<text x="565.0" y="606" fill="#30465f" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle">Middle right</text>
+<rect x="499" y="634" width="132" height="48" rx="6" fill="#f7f9fc" stroke="#d6dee8" stroke-width="1" />
+<text x="565.0" y="663" fill="#30465f" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="12" font-weight="400" text-anchor="middle">Bottom right</text>
+<rect x="668" y="382" width="624" height="340" rx="12" fill="#fff" stroke="none" stroke-width="1" />
+<text x="692" y="419" fill="#192536" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="21" font-weight="650" text-anchor="start">Horizontal · six presets</text>
+<text x="692" y="447" fill="#536278" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="400" text-anchor="start">Left / center / right on top or bottom.</text>
+<rect x="692" y="466" width="282" height="36" rx="6" fill="#f3f5f9" stroke="#d6dee8" stroke-width="1" />
+<rect x="834" y="468" width="138" height="32" rx="5" fill="#fff" stroke="#cbd6e5" stroke-width="1" />
+<text x="764" y="489" fill="#63748b" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="13" font-weight="400" text-anchor="middle">Vertical</text>
+<text x="904" y="489" fill="#276be0" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="13" font-weight="600" text-anchor="middle">Horizontal</text>
+<rect x="692" y="520" width="282" height="170" rx="8" fill="#edf2f8" stroke="#c9d4e0" stroke-width="1" />
+<rect x="701" y="528" width="44" height="20" rx="4" fill="#c4d7f4" stroke="none" stroke-width="1" />
+<circle cx="712" cy="538" r="2" fill="#fff"/>
+<circle cx="723" cy="538" r="2" fill="#fff"/>
+<circle cx="734" cy="538" r="2" fill="#fff"/>
+<rect x="811" y="528" width="44" height="20" rx="4" fill="#c4d7f4" stroke="none" stroke-width="1" />
+<circle cx="822" cy="538" r="2" fill="#fff"/>
+<circle cx="833" cy="538" r="2" fill="#fff"/>
+<circle cx="844" cy="538" r="2" fill="#fff"/>
+<rect x="921" y="528" width="44" height="20" rx="4" fill="#c4d7f4" stroke="none" stroke-width="1" />
+<circle cx="932" cy="538" r="2" fill="#fff"/>
+<circle cx="943" cy="538" r="2" fill="#fff"/>
+<circle cx="954" cy="538" r="2" fill="#fff"/>
+<rect x="701" y="662" width="44" height="20" rx="4" fill="#2674e8" stroke="none" stroke-width="1" />
+<circle cx="712" cy="672" r="2" fill="#fff"/>
+<circle cx="723" cy="672" r="2" fill="#fff"/>
+<circle cx="734" cy="672" r="2" fill="#fff"/>
+<rect x="811" y="662" width="44" height="20" rx="4" fill="#c4d7f4" stroke="none" stroke-width="1" />
+<circle cx="822" cy="672" r="2" fill="#fff"/>
+<circle cx="833" cy="672" r="2" fill="#fff"/>
+<circle cx="844" cy="672" r="2" fill="#fff"/>
+<rect x="921" y="662" width="44" height="20" rx="4" fill="#c4d7f4" stroke="none" stroke-width="1" />
+<circle cx="932" cy="672" r="2" fill="#fff"/>
+<circle cx="943" cy="672" r="2" fill="#fff"/>
+<circle cx="954" cy="672" r="2" fill="#fff"/>
+<rect x="996" y="542" width="88" height="48" rx="6" fill="#f7f9fc" stroke="#d6dee8" stroke-width="1" />
+<text x="1040.0" y="571" fill="#30465f" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="11" font-weight="400" text-anchor="middle">Top left</text>
+<rect x="1090" y="542" width="88" height="48" rx="6" fill="#f7f9fc" stroke="#d6dee8" stroke-width="1" />
+<text x="1134.0" y="571" fill="#30465f" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="11" font-weight="400" text-anchor="middle">Top center</text>
+<rect x="1184" y="542" width="88" height="48" rx="6" fill="#f7f9fc" stroke="#d6dee8" stroke-width="1" />
+<text x="1228.0" y="571" fill="#30465f" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="11" font-weight="400" text-anchor="middle">Top right</text>
+<rect x="996" y="628" width="88" height="48" rx="6" fill="#e8f1ff" stroke="#2674e8" stroke-width="2" />
+<text x="1040.0" y="657" fill="#30465f" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="11" font-weight="550" text-anchor="middle">Bottom left</text>
+<rect x="1090" y="628" width="88" height="48" rx="6" fill="#f7f9fc" stroke="#d6dee8" stroke-width="1" />
+<text x="1134.0" y="657" fill="#30465f" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="11" font-weight="400" text-anchor="middle">Bottom center</text>
+<rect x="1184" y="628" width="88" height="48" rx="6" fill="#f7f9fc" stroke="#d6dee8" stroke-width="1" />
+<text x="1228.0" y="657" fill="#30465f" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="11" font-weight="400" text-anchor="middle">Bottom right</text>
+<rect x="28" y="738" width="1264" height="300" rx="12" fill="#fff" stroke="none" stroke-width="1" />
+<text x="52" y="775" fill="#192536" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="21" font-weight="650" text-anchor="start">Hover previews · window title only</text>
+<text x="52" y="803" fill="#536278" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="15" font-weight="400" text-anchor="start">One app per hover group: remove the repeated application line and reduce card height.</text>
+<rect x="52" y="823" width="268" height="176" rx="6" fill="#eaf2ff" stroke="#2674e8" stroke-width="2" />
+<rect x="62" y="833" width="248" height="118" rx="4" fill="#fff" stroke="#ccd6e4" stroke-width="1" />
+<rect x="63" y="834" width="246" height="15" rx="3" fill="#e8edf3" stroke="none" stroke-width="1" />
+<circle cx="74" cy="841" r="2" fill="#e89a96"/>
+<circle cx="82" cy="841" r="2" fill="#e9c477"/>
+<circle cx="90" cy="841" r="2" fill="#99c4a5"/>
+<rect x="72" y="859" width="86" height="10" rx="2" fill="#d8e7ff" stroke="none" stroke-width="1" />
+<rect x="72" y="878" width="65" height="60" rx="2" fill="#e7edf5" stroke="none" stroke-width="1" />
+<line x1="150" y1="880" x2="287" y2="880" stroke="#d7e1ee" stroke-width="3" stroke-linecap="round" stroke-dasharray=""/>
+<line x1="150" y1="896" x2="287" y2="896" stroke="#d7e1ee" stroke-width="3" stroke-linecap="round" stroke-dasharray=""/>
+<line x1="150" y1="912" x2="287" y2="912" stroke="#d7e1ee" stroke-width="3" stroke-linecap="round" stroke-dasharray=""/>
+<line x1="150" y1="928" x2="287" y2="928" stroke="#d7e1ee" stroke-width="3" stroke-linecap="round" stroke-dasharray=""/>
+<text x="66" y="979" fill="#151e2b" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="15" font-weight="650" text-anchor="start">GitHub — Docky</text>
+<circle cx="300" cy="980" r="7" fill="#2674e8"/>
+<path d="M 297 980 L 299 982 L 304 977" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="326" y="823" width="268" height="176" rx="6" fill="#f5f7fa" stroke="#d8e0e9" stroke-width="1" />
+<rect x="336" y="833" width="248" height="118" rx="4" fill="#fff" stroke="#ccd6e4" stroke-width="1" />
+<rect x="337" y="834" width="246" height="15" rx="3" fill="#e8edf3" stroke="none" stroke-width="1" />
+<circle cx="348" cy="841" r="2" fill="#e89a96"/>
+<circle cx="356" cy="841" r="2" fill="#e9c477"/>
+<circle cx="364" cy="841" r="2" fill="#99c4a5"/>
+<rect x="346" y="859" width="86" height="10" rx="2" fill="#d8e7ff" stroke="none" stroke-width="1" />
+<rect x="346" y="878" width="65" height="60" rx="2" fill="#e7edf5" stroke="none" stroke-width="1" />
+<line x1="424" y1="880" x2="561" y2="880" stroke="#d7e1ee" stroke-width="3" stroke-linecap="round" stroke-dasharray=""/>
+<line x1="424" y1="896" x2="561" y2="896" stroke="#d7e1ee" stroke-width="3" stroke-linecap="round" stroke-dasharray=""/>
+<line x1="424" y1="912" x2="561" y2="912" stroke="#d7e1ee" stroke-width="3" stroke-linecap="round" stroke-dasharray=""/>
+<line x1="424" y1="928" x2="561" y2="928" stroke="#d7e1ee" stroke-width="3" stroke-linecap="round" stroke-dasharray=""/>
+<text x="340" y="979" fill="#151e2b" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="15" font-weight="650" text-anchor="start">Calendar — Week view</text>
+<rect x="600" y="823" width="268" height="176" rx="6" fill="#f5f7fa" stroke="#d8e0e9" stroke-width="1" />
+<rect x="610" y="833" width="248" height="118" rx="4" fill="#fff" stroke="#ccd6e4" stroke-width="1" />
+<rect x="611" y="834" width="246" height="15" rx="3" fill="#e8edf3" stroke="none" stroke-width="1" />
+<circle cx="622" cy="841" r="2" fill="#e89a96"/>
+<circle cx="630" cy="841" r="2" fill="#e9c477"/>
+<circle cx="638" cy="841" r="2" fill="#99c4a5"/>
+<rect x="620" y="859" width="86" height="10" rx="2" fill="#d8e7ff" stroke="none" stroke-width="1" />
+<rect x="620" y="878" width="65" height="60" rx="2" fill="#e7edf5" stroke="none" stroke-width="1" />
+<line x1="698" y1="880" x2="835" y2="880" stroke="#d7e1ee" stroke-width="3" stroke-linecap="round" stroke-dasharray=""/>
+<line x1="698" y1="896" x2="835" y2="896" stroke="#d7e1ee" stroke-width="3" stroke-linecap="round" stroke-dasharray=""/>
+<line x1="698" y1="912" x2="835" y2="912" stroke="#d7e1ee" stroke-width="3" stroke-linecap="round" stroke-dasharray=""/>
+<line x1="698" y1="928" x2="835" y2="928" stroke="#d7e1ee" stroke-width="3" stroke-linecap="round" stroke-dasharray=""/>
+<text x="614" y="979" fill="#151e2b" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="15" font-weight="650" text-anchor="start">Documentation</text>
+<text x="904" y="859" fill="#192536" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="15" font-weight="600" text-anchor="start">6 pt gaps</text>
+<text x="904" y="891" fill="#536278" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="400" text-anchor="start">Same readable titles and</text>
+<text x="904" y="913" fill="#536278" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="400" text-anchor="start">accent selection highlight.</text>
+<text x="904" y="955" fill="#536278" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="400" text-anchor="start">Keyboard switcher keeps app</text>
+<text x="904" y="977" fill="#536278" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="400" text-anchor="start">names for mixed-app results.</text>
+<text x="52" y="1024" fill="#63748b" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="13" font-weight="400" text-anchor="start">The six buttons are presets; dragging still allows intermediate positions along an edge.</text>
+</svg>

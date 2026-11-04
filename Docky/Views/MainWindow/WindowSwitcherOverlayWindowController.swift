@@ -188,32 +188,13 @@ private struct WindowSwitcherOverlayView: View {
     @Bindable private var preferences = DockyPreferences.shared
     @ObservedObject private var permissions = PermissionsService.shared
 
-    private let innerPreviewCornerRadius: CGFloat = 16
-    private let cardPadding: CGFloat = 12
-    private let containerPadding: CGFloat = 18
-    /// Inner padding between the chrome and its content. Same value for both
-    /// layouts so the formula `chrome - padding` produces consistent edge
-    /// radii across thumbnails and list.
+    @Bindable private var appearance = PreviewAppearancePreferences.shared
     private let interiorPadding: CGFloat = 8
 
-    private var cardCornerRadius: CGFloat {
-        innerPreviewCornerRadius + cardPadding
-    }
-
-    private var containerCornerRadius: CGFloat {
-        cardCornerRadius + containerPadding
-    }
-
-    /// Outer corner radius for cards/rows touching the chrome edge —
-    /// chrome radius minus the interior padding so curves run parallel.
-    private var edgeContentCornerRadius: CGFloat {
-        max(0, containerCornerRadius - interiorPadding)
-    }
-
-    /// Half the edge radius. Used for corners facing a neighbor card/row.
-    private var innerContentCornerRadius: CGFloat {
-        edgeContentCornerRadius / 2
-    }
+    private var innerPreviewCornerRadius: CGFloat { appearance.cornerStyle.radius }
+    private var containerCornerRadius: CGFloat { appearance.cornerStyle.radius }
+    private var edgeContentCornerRadius: CGFloat { appearance.cornerStyle.radius }
+    private var innerContentCornerRadius: CGFloat { appearance.cornerStyle.radius }
 
     private var resolvedLayout: WindowSwitcherLayout {
         preferences.windowSwitcherLayout
@@ -259,15 +240,11 @@ private struct WindowSwitcherOverlayView: View {
     private func thumbnailLayout(containerSize: CGSize) -> some View {
         ScrollViewReader { scrollProxy in
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 18) {
+                HStack(spacing: 6) {
                     ForEach(Array(switcher.windows.enumerated()), id: \.element.id) { index, window in
                         let total = switcher.windows.count
                         let isFirst = index == 0
                         let isLast = index == total - 1
-                        // Mirror of the list layout, rotated 90°: leading
-                        // corners hug chrome on the first card, trailing on
-                        // the last card; corners facing a neighbor get the
-                        // inner radius.
                         let leadingRadius = isFirst ? edgeContentCornerRadius : innerContentCornerRadius
                         let trailingRadius = isLast ? edgeContentCornerRadius : innerContentCornerRadius
                         WindowSwitcherCard(
@@ -284,7 +261,7 @@ private struct WindowSwitcherOverlayView: View {
             }
             .frame(maxWidth: max(0, containerSize.width - 80))
             .fixedSize(horizontal: true, vertical: true)
-            .background(.primary.opacity(0.18))
+            .background(Color(nsColor: .windowBackgroundColor).opacity(0.94))
             .background(.ultraThinMaterial)
             .clipShape(RoundedRectangle(cornerRadius: containerCornerRadius, style: .continuous))
             .onChange(of: switcher.selectedWindowIdentifier) { selection in
@@ -297,10 +274,7 @@ private struct WindowSwitcherOverlayView: View {
     }
 
     private var listLayout: some View {
-        // List chrome is tighter than thumbnail mode — the container is
-        // text-only so a small radius reads cleaner than the chunky 46pt
-        // used for the thumbnail card stack.
-        WindowSwitcherListView(cornerRadius: 16, interiorPadding: interiorPadding)
+        WindowSwitcherListView(cornerRadius: containerCornerRadius, interiorPadding: interiorPadding)
     }
 
     private var emptyStateCard: some View {
@@ -314,14 +288,14 @@ private struct WindowSwitcherOverlayView: View {
                     .foregroundStyle(.primary)
                 Text("Nothing to switch to right now.")
                     .font(.system(size: 12))
-                    .foregroundStyle(.primary.opacity(0.6))
+                    .foregroundStyle(.secondary)
             }
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 16)
-        .background(.primary.opacity(0.18))
+        .background(Color(nsColor: .windowBackgroundColor).opacity(0.94))
         .background(.ultraThinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: containerCornerRadius, style: .continuous))
     }
 }
 
@@ -335,30 +309,22 @@ private struct WindowSwitcherListView: View {
     private let rowHeight: CGFloat = 52
     private let maxVisibleRows: Int = 8
 
-    /// First and last rows hug the container chrome — their radius is the
-    /// container's radius minus our inner padding, so the row's outer edge
-    /// runs parallel to the container edge.
     private var edgeRowCornerRadius: CGFloat {
-        max(0, cornerRadius - interiorPadding)
+        cornerRadius
     }
 
-    /// Middle rows step the radius down — half the edge radius — so
-    /// in-list selection highlights look like rows, not detached pills.
     private var innerRowCornerRadius: CGFloat {
-        edgeRowCornerRadius / 2
+        cornerRadius
     }
 
     var body: some View {
         ScrollViewReader { scrollProxy in
             ScrollView(.vertical, showsIndicators: false) {
-                LazyVStack(spacing: 2) {
+                LazyVStack(spacing: 6) {
                     ForEach(Array(switcher.windows.enumerated()), id: \.element.id) { index, window in
                         let total = switcher.windows.count
                         let isFirst = index == 0
                         let isLast = index == total - 1
-                        // Outer edge (top of first row, bottom of last row)
-                        // hugs the chrome; the inner edge — facing a neighbor
-                        // row — uses the half radius for visual continuity.
                         let topRadius = isFirst ? edgeRowCornerRadius : innerRowCornerRadius
                         let bottomRadius = isLast ? edgeRowCornerRadius : innerRowCornerRadius
                         WindowSwitcherListRow(
@@ -374,9 +340,9 @@ private struct WindowSwitcherListView: View {
                 .padding(interiorPadding)
             }
             .frame(width: listWidth)
-            .frame(maxHeight: CGFloat(maxVisibleRows) * rowHeight + 16)
+            .frame(maxHeight: CGFloat(maxVisibleRows) * rowHeight + CGFloat(maxVisibleRows - 1) * 6 + interiorPadding * 2)
             .fixedSize(horizontal: true, vertical: true)
-            .background(.primary.opacity(0.18))
+            .background(Color(nsColor: .windowBackgroundColor).opacity(0.94))
             .background(.ultraThinMaterial)
             .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
             .onChange(of: switcher.selectedWindowIdentifier) { selection in
@@ -429,17 +395,23 @@ private struct WindowSwitcherListRow: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(displayTitle)
                     .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(.primary.opacity(isSelected ? 1 : 0.85))
+                    .foregroundStyle(.primary)
                     .lineLimit(1)
                     .truncationMode(.middle)
 
                 Text(window.appDisplayName)
                     .font(.system(size: 11, weight: .medium))
-                    .foregroundStyle(.primary.opacity(isSelected ? 0.75 : 0.5))
+                    .foregroundStyle(.secondary)
                     .lineLimit(1)
                     .truncationMode(.tail)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+
+            if isSelected {
+                Image(systemName: "checkmark.circle.fill")
+                    .foregroundStyle(Color.accentColor)
+                    .accessibilityLabel("Selected window")
+            }
 
             if window.isMinimized {
                 Image(systemName: "minus.diamond.fill")
@@ -451,10 +423,10 @@ private struct WindowSwitcherListRow: View {
         .frame(height: height)
         .background {
             rowShape
-                .fill(isSelected ? .white.opacity(0.16) : .clear)
+                .fill(isSelected ? Color.accentColor.opacity(0.14) : Color.clear)
                 .overlay {
                     rowShape
-                        .strokeBorder(isSelected ? .white.opacity(0.28) : .clear, lineWidth: 1)
+                        .strokeBorder(isSelected ? Color.accentColor : Color.clear, lineWidth: 2)
                 }
         }
         .background {
@@ -575,27 +547,25 @@ private struct WindowSwitcherCard: View {
             VStack(spacing: 4) {
                 Text(displayTitle)
                     .font(.system(size: 14, weight: .semibold))
-                    .foregroundStyle(.primary.opacity(0.96))
+                    .foregroundStyle(.primary)
                     .lineLimit(1)
                     .truncationMode(.tail)
-                    .opacity(isSelected ? 1 : 0.25)
 
                 Text(window.appDisplayName)
                     .font(.system(size: 12, weight: .medium))
-                    .foregroundStyle(.primary.opacity(0.6))
+                    .foregroundStyle(.secondary)
                     .lineLimit(1)
                     .truncationMode(.tail)
-                    .opacity(isSelected ? 1 : 0.12)
             }
             .frame(width: 180)
         }
         .padding(12)
         .background {
             cardShape
-                .fill(isSelected ? .white.opacity(0.14) : .white.opacity(0.0))
+                .fill(isSelected ? Color.accentColor.opacity(0.14) : Color.clear)
                 .overlay {
                     cardShape
-                        .strokeBorder(isSelected ? .white.opacity(0.28) : .white.opacity(0.0), lineWidth: 1)
+                        .strokeBorder(isSelected ? Color.accentColor : Color.clear, lineWidth: 2)
                 }
         }
         .background {
@@ -603,6 +573,16 @@ private struct WindowSwitcherCard: View {
                 actionProvider: contextActions(modifierFlags:),
                 onPresentationChanged: switcher.setContextMenuPresented
             )
+        }
+        .overlay(alignment: .bottomTrailing) {
+            if isSelected {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 12, weight: .semibold))
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(.white, Color.accentColor)
+                    .padding(5)
+                    .allowsHitTesting(false)
+            }
         }
         .contentShape(cardShape)
         .onHover { isHovering in
@@ -632,7 +612,7 @@ private struct WindowSwitcherCard: View {
         // diamond badge in the bottom-right corner.
         .saturation(window.isMinimized ? 0 : 1)
         .opacity(window.isMinimized ? 0.7 : 1)
-        .clipShape(RoundedRectangle(cornerRadius: innerPreviewCornerRadius/4, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: innerPreviewCornerRadius, style: .continuous))
         .overlay {
             if window.isMinimized {
                 minimizedBadge

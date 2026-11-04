@@ -3,6 +3,7 @@
 //  Docky
 //
 
+import AppKit
 import SwiftUI
 
 struct BehaviorSettingsView: View {
@@ -20,6 +21,7 @@ struct BehaviorSettingsView: View {
     let subsection: Subsection
 
     @Bindable private var preferences = DockyPreferences.shared
+    @Bindable private var placement = DockPlacementPreferences.shared
     @State private var isShowingResetConfirmation = false
 
     var body: some View {
@@ -50,6 +52,7 @@ struct BehaviorSettingsView: View {
         ) {
             Button("Reset Behavior", role: .destructive) {
                 DockyPreferences.shared.resetBehaviorToDefaults()
+                placement.resetToDefaults()
             }
             Button("Cancel", role: .cancel) {}
         } message: {
@@ -89,16 +92,40 @@ struct BehaviorSettingsView: View {
 
                     Spacer()
 
-                    Picker("Window Position", selection: $preferences.windowPosition) {
-                        ForEach(DockWindowPosition.allCases) { position in
-                            Text(position.title).tag(position)
-                        }
-                    }
-                    .pickerStyle(.menu)
-                    .labelsHidden()
+                    Button("Follow System Dock") { preferences.windowPosition = .system }
+                        .disabled(preferences.windowPosition == .system)
                 }
+                DockPositionPicker()
+                Text("Choose a preset or drag to an intermediate position along an edge.")
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(.vertical, 4)
 
-                Text("Choose where Docky sits on screen, or mirror the macOS Dock position. Bottom Left places a vertical dock at the bottom of the left edge.")
+            VStack(alignment: .leading, spacing: 8) {
+                Toggle("Show control bar in the dock", isOn: $placement.showsControlTile)
+                    .font(.headline)
+                Text("Optional. Click the dotted bar to collapse or expand, right-click to choose a position, or drag it when repositioning is unlocked. A collapsed dock always keeps the bar.")
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(.vertical, 4)
+
+            VStack(alignment: .leading, spacing: 8) {
+                Toggle("Allow dragging to reposition", isOn: $placement.allowsDragging)
+                    .font(.headline)
+
+                Text("Drag empty dock background or a divider gap to reposition any edge or corner layout. The dock stays attached to a screen edge. Hold at a shared monitor edge for 0.7 seconds to cross to the next display.")
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .padding(.vertical, 4)
+
+            VStack(alignment: .leading, spacing: 8) {
+                Toggle("Allow border resizing", isOn: $placement.allowsResizing)
+                    .font(.headline)
+
+                Text("Drag the dock’s outer border to change icon size. Dock length follows its content, and its edge or corner alignment stays in place.")
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -118,9 +145,12 @@ struct BehaviorSettingsView: View {
                     }
                     .pickerStyle(.menu)
                     .labelsHidden()
+                    .disabled(preferences.windowPosition.isFree)
                 }
 
-                Text("Docky uses a single main window. Choose whether it stays on the primary display or follows the display containing the pointer.")
+                Text(preferences.windowPosition.isFree
+                     ? "Edge Position remembers its display and location. When dragging is unlocked, hold at the shared screen edge for 0.7 seconds to move to another display."
+                     : "Docky uses a single main window. Choose whether it stays on the primary display or follows the display containing the pointer.")
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -156,8 +186,11 @@ struct BehaviorSettingsView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Toggle("Autohide Window", isOn: $preferences.autohidesWindow)
                     .font(.headline)
+                    .disabled(preferences.windowPosition.isFree)
 
-                Text("Slides Docky's window off-screen until the pointer reaches its edge. Hide timing is controlled by Docky's own delay below, so hiding the system Dock does not stretch it.")
+                Text(preferences.windowPosition.isFree
+                     ? "Edge Position pauses autohide and fullscreen hiding. Use the in-dock control to collapse Docky; saved visibility settings resume when you choose a fixed position."
+                     : "Slides Docky's window off-screen until the pointer reaches its edge. Hide timing is controlled by Docky's own delay below, so hiding the system Dock does not stretch it.")
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -297,9 +330,12 @@ struct BehaviorSettingsView: View {
                     }
                     .pickerStyle(.menu)
                     .labelsHidden()
+                    .disabled(preferences.windowPosition.isFree)
                 }
 
-                Text("Choose whether Docky hugs its tiles or stretches across the full screen width or height of the current dock axis.")
+                Text(preferences.windowPosition.isFree
+                     ? "Edge Position always fits the dock to its tiles. Your saved axis size resumes when you choose a fixed position."
+                     : "Choose whether Docky hugs its tiles or stretches across the full screen width or height of the current dock axis.")
                     .foregroundStyle(.secondary)
                     .fixedSize(horizontal: false, vertical: true)
             }

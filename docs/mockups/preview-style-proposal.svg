@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="860" viewBox="0 0 1280 860" role="img">
+<title>Docky interface proposal for review</title>
+<defs><filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="8" stdDeviation="13" flood-color="#182638" flood-opacity=".12"/></filter></defs>
+<rect x="0" y="0" width="1280" height="860" rx="0" fill="#f4f7fb" stroke="none" stroke-width="1" />
+<rect x="36" y="20" width="352.0" height="26" rx="7" fill="#eaf1ff" stroke="none" stroke-width="1" />
+<text x="47" y="38" fill="#205bb7" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="12" font-weight="600" text-anchor="start">PREVIEW STYLE · REVIEW BEFORE IMPLEMENTATION</text>
+<text x="36" y="86" fill="#192536" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="32" font-weight="700" text-anchor="start">Readable previews, quieter corners</text>
+<text x="36" y="117" fill="#536278" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="17" font-weight="400" text-anchor="start">Keep every title readable. Use shape, color, and an outline to show the selected window.</text>
+<rect x="28" y="144" width="1224" height="360" rx="12" fill="#fff" stroke="none" stroke-width="1" />
+<text x="52" y="180" fill="#192536" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="20" font-weight="650" text-anchor="start">Compact spacing: 6 pt gaps · Subtle corners: 6 pt</text>
+<rect x="52" y="201" width="296" height="276" rx="6" fill="#eaf2ff" stroke="#2674e8" stroke-width="2.5" />
+<rect x="64" y="214" width="272" height="170" rx="4" fill="#fff" stroke="#c6d0dd" stroke-width="1" />
+<rect x="64" y="214" width="272" height="20" rx="4" fill="#e8edf3" stroke="none" stroke-width="1" />
+<circle cx="74" cy="224" r="2.5" fill="#e89a96"/>
+<circle cx="85" cy="224" r="2.5" fill="#e9c477"/>
+<circle cx="96" cy="224" r="2.5" fill="#99c4a5"/>
+<rect x="76" y="244" width="182.24" height="12" rx="3" fill="#d8e7ff" stroke="none" stroke-width="1" />
+<rect x="76" y="264" width="84.32" height="107" rx="3" fill="#e7edf5" stroke="none" stroke-width="1" />
+<rect x="167.36" y="264" width="149.60000000000002" height="107" rx="3" fill="#f1f5f9" stroke="none" stroke-width="1" />
+<line x1="178.24" y1="277" x2="295.2" y2="277" stroke="#c4d2e2" stroke-width="3" stroke-linecap="round" stroke-dasharray=""/>
+<line x1="178.24" y1="292" x2="295.2" y2="292" stroke="#c4d2e2" stroke-width="3" stroke-linecap="round" stroke-dasharray=""/>
+<line x1="178.24" y1="307" x2="295.2" y2="307" stroke="#c4d2e2" stroke-width="3" stroke-linecap="round" stroke-dasharray=""/>
+<text x="68" y="414" fill="#151e2b" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="17" font-weight="650" text-anchor="start">GitHub — Docky</text>
+<text x="68" y="440" fill="#485a70" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="450" text-anchor="start">Google Chrome</text>
+<circle cx="322" cy="455" r="9" fill="#2674e8"/>
+<path d="M 318 455 L 321 458 L 327 452" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="354" y="201" width="296" height="276" rx="6" fill="#f5f7fa" stroke="#d8e0e9" stroke-width="1" />
+<rect x="366" y="214" width="272" height="170" rx="4" fill="#fff" stroke="#c6d0dd" stroke-width="1" />
+<rect x="366" y="214" width="272" height="20" rx="4" fill="#e8edf3" stroke="none" stroke-width="1" />
+<circle cx="376" cy="224" r="2.5" fill="#e89a96"/>
+<circle cx="387" cy="224" r="2.5" fill="#e9c477"/>
+<circle cx="398" cy="224" r="2.5" fill="#99c4a5"/>
+<rect x="376.0" y="244.0" width="49.4" height="42.333333333333336" rx="2" fill="#e4edfa" stroke="none" stroke-width="1" />
+<rect x="376.0" y="288.3333333333333" width="49.4" height="42.333333333333336" rx="2" fill="#f2f5fa" stroke="none" stroke-width="1" />
+<rect x="376.0" y="332.6666666666667" width="49.4" height="42.333333333333336" rx="2" fill="#e4edfa" stroke="none" stroke-width="1" />
+<rect x="426.4" y="244.0" width="49.4" height="42.333333333333336" rx="2" fill="#f2f5fa" stroke="none" stroke-width="1" />
+<rect x="426.4" y="288.3333333333333" width="49.4" height="42.333333333333336" rx="2" fill="#e4edfa" stroke="none" stroke-width="1" />
+<rect x="426.4" y="332.6666666666667" width="49.4" height="42.333333333333336" rx="2" fill="#f2f5fa" stroke="none" stroke-width="1" />
+<rect x="476.8" y="244.0" width="49.4" height="42.333333333333336" rx="2" fill="#e4edfa" stroke="none" stroke-width="1" />
+<rect x="476.8" y="288.3333333333333" width="49.4" height="42.333333333333336" rx="2" fill="#f2f5fa" stroke="none" stroke-width="1" />
+<rect x="476.8" y="332.6666666666667" width="49.4" height="42.333333333333336" rx="2" fill="#e4edfa" stroke="none" stroke-width="1" />
+<rect x="527.2" y="244.0" width="49.4" height="42.333333333333336" rx="2" fill="#f2f5fa" stroke="none" stroke-width="1" />
+<rect x="527.2" y="288.3333333333333" width="49.4" height="42.333333333333336" rx="2" fill="#e4edfa" stroke="none" stroke-width="1" />
+<rect x="527.2" y="332.6666666666667" width="49.4" height="42.333333333333336" rx="2" fill="#f2f5fa" stroke="none" stroke-width="1" />
+<rect x="577.6" y="244.0" width="49.4" height="42.333333333333336" rx="2" fill="#e4edfa" stroke="none" stroke-width="1" />
+<rect x="577.6" y="288.3333333333333" width="49.4" height="42.333333333333336" rx="2" fill="#f2f5fa" stroke="none" stroke-width="1" />
+<rect x="577.6" y="332.6666666666667" width="49.4" height="42.333333333333336" rx="2" fill="#e4edfa" stroke="none" stroke-width="1" />
+<text x="370" y="414" fill="#151e2b" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="17" font-weight="650" text-anchor="start">Calendar — Week view</text>
+<text x="370" y="440" fill="#485a70" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="450" text-anchor="start">Google Chrome</text>
+<rect x="656" y="201" width="296" height="276" rx="6" fill="#f5f7fa" stroke="#d8e0e9" stroke-width="1" />
+<rect x="668" y="214" width="272" height="170" rx="4" fill="#fff" stroke="#c6d0dd" stroke-width="1" />
+<rect x="668" y="214" width="272" height="20" rx="4" fill="#e8edf3" stroke="none" stroke-width="1" />
+<circle cx="678" cy="224" r="2.5" fill="#e89a96"/>
+<circle cx="689" cy="224" r="2.5" fill="#e9c477"/>
+<circle cx="700" cy="224" r="2.5" fill="#99c4a5"/>
+<rect x="680" y="244" width="182.24" height="12" rx="3" fill="#d8e7ff" stroke="none" stroke-width="1" />
+<rect x="680" y="264" width="84.32" height="107" rx="3" fill="#e7edf5" stroke="none" stroke-width="1" />
+<rect x="771.36" y="264" width="149.60000000000002" height="107" rx="3" fill="#f1f5f9" stroke="none" stroke-width="1" />
+<line x1="782.24" y1="277" x2="899.2" y2="277" stroke="#c4d2e2" stroke-width="3" stroke-linecap="round" stroke-dasharray=""/>
+<line x1="782.24" y1="292" x2="899.2" y2="292" stroke="#c4d2e2" stroke-width="3" stroke-linecap="round" stroke-dasharray=""/>
+<line x1="782.24" y1="307" x2="899.2" y2="307" stroke="#c4d2e2" stroke-width="3" stroke-linecap="round" stroke-dasharray=""/>
+<text x="672" y="414" fill="#151e2b" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="17" font-weight="650" text-anchor="start">DockyPreferences.swift</text>
+<text x="672" y="440" fill="#485a70" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="450" text-anchor="start">Xcode</text>
+<text x="1014" y="248" fill="#2667ca" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="12" font-weight="650" text-anchor="start">SELECTED</text>
+<text x="1014" y="275" fill="#192536" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="15" font-weight="550" text-anchor="start">Blue border</text>
+<text x="1014" y="299" fill="#192536" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="15" font-weight="550" text-anchor="start">Soft blue fill</text>
+<line x1="1014" y1="320" x2="1228" y2="320" stroke="#dce3ed" stroke-width="1" stroke-linecap="round" stroke-dasharray=""/>
+<text x="1014" y="352" fill="#63748b" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="12" font-weight="650" text-anchor="start">ALL WINDOWS</text>
+<text x="1014" y="379" fill="#192536" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="15" font-weight="550" text-anchor="start">Dark titles</text>
+<text x="1014" y="403" fill="#192536" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="15" font-weight="550" text-anchor="start">Readable app names</text>
+<text x="1014" y="442" fill="#536278" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="400" text-anchor="start">6 pt between cards.</text>
+<rect x="28" y="520" width="674" height="306" rx="12" fill="#fff" stroke="none" stroke-width="1" />
+<text x="52" y="558" fill="#192536" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="20" font-weight="650" text-anchor="start">Window Preview → Appearance</text>
+<text x="52" y="587" fill="#192536" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="15" font-weight="550" text-anchor="start">Corner style</text>
+<rect x="52" y="600" width="186" height="42" rx="7" fill="#f3f5f9" stroke="#d6dee8" stroke-width="1" />
+<text x="145.0" y="626" fill="#52647a" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="450" text-anchor="middle">Square · 0 pt</text>
+<rect x="244" y="600" width="200" height="42" rx="7" fill="#e7f0ff" stroke="#2674e8" stroke-width="2" />
+<text x="344.0" y="626" fill="#245cae" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="600" text-anchor="middle">Subtle · 6 pt</text>
+<rect x="450" y="600" width="226" height="42" rx="7" fill="#f3f5f9" stroke="#d6dee8" stroke-width="1" />
+<text x="563.0" y="626" fill="#52647a" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="450" text-anchor="middle">Rounded · 14 pt</text>
+<text x="52" y="679" fill="#192536" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="15" font-weight="550" text-anchor="start">Selection highlight</text>
+<rect x="52" y="692" width="624" height="42" rx="6" fill="#f3f5f9" stroke="#d6dee8" stroke-width="1" />
+<circle cx="73" cy="713" r="7" fill="#2674e8"/>
+<text x="94" y="718" fill="#3c506a" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="400" text-anchor="start">System accent · outline + tinted fill</text>
+<text x="52" y="766" fill="#52647a" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="400" text-anchor="start">Same corner style for thumbnails and list previews.</text>
+<text x="52" y="790" fill="#52647a" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="400" text-anchor="start">Apply it to the keyboard switcher too for consistency.</text>
+<rect x="718" y="520" width="534" height="306" rx="12" fill="#fff" stroke="none" stroke-width="1" />
+<text x="742" y="558" fill="#192536" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="20" font-weight="650" text-anchor="start">List previews use the same treatment</text>
+<rect x="742" y="580" width="486" height="66" rx="6" fill="#eaf2ff" stroke="#2674e8" stroke-width="2" />
+<rect x="754" y="593" width="40" height="40" rx="10" fill="#4385e5" stroke="none" stroke-width="1" />
+<text x="774" y="620" fill="#fff" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="22" font-weight="600" text-anchor="middle">C</text>
+<text x="808" y="606" fill="#151e2b" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="16" font-weight="650" text-anchor="start">GitHub — Docky</text>
+<text x="808" y="629" fill="#485a70" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="13" font-weight="400" text-anchor="start">Google Chrome</text>
+<rect x="742" y="652" width="486" height="66" rx="6" fill="#f5f7fa" stroke="#d8e0e9" stroke-width="1" />
+<rect x="754" y="665" width="40" height="40" rx="10" fill="#4385e5" stroke="none" stroke-width="1" />
+<text x="774" y="692" fill="#fff" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="22" font-weight="600" text-anchor="middle">C</text>
+<text x="808" y="678" fill="#151e2b" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="16" font-weight="650" text-anchor="start">Calendar — Week view</text>
+<text x="808" y="701" fill="#485a70" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="13" font-weight="400" text-anchor="start">Google Chrome</text>
+<text x="742" y="766" fill="#52647a" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="400" text-anchor="start">Use full-contrast system text in dark mode, too.</text>
+<text x="742" y="790" fill="#52647a" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-size="14" font-weight="400" text-anchor="start">Color and border distinguish selection, not dim labels.</text>
+</svg>

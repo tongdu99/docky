@@ -7,6 +7,7 @@ import SwiftUI
 
 struct WindowManagementSettingsView: View {
     @Bindable private var preferences = DockyPreferences.shared
+    @Bindable private var previewAppearance = PreviewAppearancePreferences.shared
     @ObservedObject private var permissions = PermissionsService.shared
     @State private var isRecordingShortcut = false
     @State private var isRecordingMinimizeKey = false
@@ -170,6 +171,24 @@ struct WindowManagementSettingsView: View {
             }
 
             Section("Window Preview") {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Corner Style")
+                        .font(.headline)
+
+                    Picker("Corner Style", selection: $previewAppearance.cornerStyle) {
+                        ForEach(PreviewCornerStyle.allCases) { style in
+                            Text(style.title).tag(style)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .labelsHidden()
+
+                    Text("Applies to thumbnail and list previews, including the keyboard switcher. Selection uses the system accent outline and tinted fill.")
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(.vertical, 4)
+
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Text("Hover Delay")

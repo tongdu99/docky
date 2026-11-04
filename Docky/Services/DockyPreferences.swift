@@ -409,16 +409,22 @@ struct TrailingTileItem: Codable, Equatable, Identifiable {
 enum DockWindowPosition: String, CaseIterable, Identifiable {
     case system
     case bottomLeft
+    case freeVertical
+    case freeHorizontal
     case left
     case right
     case bottom
 
     var id: String { rawValue }
 
+    var isFree: Bool { self == .freeVertical || self == .freeHorizontal }
+
     var title: String {
         switch self {
         case .system: String(localized: "System")
         case .bottomLeft: String(localized: "Bottom Left")
+        case .freeVertical: String(localized: "Edge Position (Vertical)")
+        case .freeHorizontal: String(localized: "Edge Position (Horizontal)")
         case .left: String(localized: "Left")
         case .right: String(localized: "Right")
         case .bottom: String(localized: "Bottom")
@@ -435,10 +441,14 @@ enum DockWindowPosition: String, CaseIterable, Identifiable {
             }
         case .left, .bottomLeft:
             .left
+        case .freeVertical:
+            DockPlacementPreferences.shared.edge == .right ? .right : .left
         case .right:
             .right
         case .bottom:
             .bottom
+        case .freeHorizontal:
+            DockPlacementPreferences.shared.edge == .top ? .top : .bottom
         }
     }
 }
@@ -1910,6 +1920,7 @@ enum LaunchpadSortMode: String, CaseIterable, Codable, Identifiable {
     /// `behavior.windowAxisSizing` when the user hasn't picked a value
     /// of their own; otherwise returns the user's choice.
     var effectiveWindowAxisSizing: DockWindowAxisSizing {
+        guard !windowPosition.isFree else { return .fitContent }
         let themed = ThemeManager.shared.activeManifest?.behavior?.windowAxisSizing
             .flatMap(DockWindowAxisSizing.init(rawValue:))
         return appearanceOverride(
@@ -4416,7 +4427,7 @@ enum LaunchpadSortMode: String, CaseIterable, Codable, Identifiable {
 
         let orientation: DockSettingsService.Orientation
         switch windowPosition {
-        case .system:
+        case .system, .freeVertical, .freeHorizontal:
             return
         case .left, .bottomLeft:
             orientation = .left

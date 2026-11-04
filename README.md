@@ -27,6 +27,74 @@ custom icons, and scripted actions.
   <img src="docs/images/hero.jpg" alt="Docky on macOS" width="900">
 </div>
 
+## Dock controls — 0.9.11
+
+On `codex/draggable-collapsible-dock`, open **Settings → Behavior → Placement**
+to choose among 12 miniature docks in a screen diagram. Each target sets both
+position and orientation in one click; corners offer both orientations.
+Enable **Show control bar in the dock** for an optional dotted bar:
+
+- Click to collapse or expand.
+- Right-click to open the position diagram.
+- Drag to move when repositioning is unlocked.
+
+The dots share the dock background without a separate grey fill.
+The bar is hidden by default. A collapsed dock always retains only the bar so
+it can be expanded. Unpinned running apps appear before Finder and pinned apps;
+files and Trash remain last. At bottom-left, new apps grow the dock upward while
+the pinned section stays anchored. The attached edge has no outer gap.
+
+Enable **Settings → Behavior → Placement → Allow dragging to reposition** to
+move the dock from empty background and divider gaps. The dock stays attached
+to an edge or corner; hold across a monitor boundary for 0.7 seconds to transfer.
+App icons retain their normal click and rearrange behavior. Docky uses a real elevated floating-panel level and disables native window
+dragging/resizing and fullscreen tiling. Its own placement and border-resize
+controls remain available; macOS desktop edge tiling still needs a manual check.
+
+**Allow border resizing** independently unlocks the inward-facing border to
+scale dock icons in either orientation. Crowded docks switch to scrolling when
+needed to preserve the requested size. Both editing options are off by default. Placement, display,
+and collapse state are remembered. Edge Position modes use fit-content sizing
+and pause edge auto-hide, fullscreen hiding, pointer-following placement and
+window reservation. Select a standard edge mode to resume those settings.
+
+**Settings → Window Management → Window Preview → Corner Style** selects
+Square (0 pt), Subtle (6 pt, default), or Rounded (14 pt) corners. Hover previews
+and the keyboard switcher share this style, tighter 6 pt spacing, readable labels,
+and accent outlines/tinted selection highlights. Hover previews show only window
+titles; the keyboard switcher keeps app names for mixed-app results. Hover preview
+panels have a thin adaptive border and native shadow, with subtle neutral outlines
+on unselected cards and rows to stay visible over light applications.
+
+See [the approved SVG mockups](docs/mockups/README.md). Future UI changes require
+an SVG design review before implementation.
+
+Geometry and native lifecycle checks can be run on macOS:
+
+```sh
+swiftc -module-cache-path /tmp/docky-test-module-cache Docky/Services/DockAppSectionOrder.swift scripts/test_dock_app_section_order.swift -o /tmp/test-dock-app-section-order
+/tmp/test-dock-app-section-order
+swiftc -module-cache-path /tmp/docky-test-module-cache Docky/Services/FloatingDockGeometry.swift scripts/test_floating_dock_geometry.swift -o /tmp/test-floating-dock-geometry
+/tmp/test-floating-dock-geometry
+swiftc -module-cache-path /tmp/docky-test-module-cache Docky/Services/FloatingDockGeometry.swift Docky/Services/DockPositionPreset.swift scripts/test_dock_position_presets.swift -o /tmp/test-dock-position-presets
+/tmp/test-dock-position-presets
+swiftc -module-cache-path /tmp/docky-test-module-cache Docky/Services/FloatingDockGeometry.swift Docky/Services/DockPositionPreset.swift Docky/Services/DockPlacementPreferences.swift Docky/Services/DockWindowInteractionPolicy.swift Docky/Views/MainWindow/FloatingDockController.swift scripts/test_floating_dock_controller.swift -o /tmp/test-floating-dock-controller
+/tmp/test-floating-dock-controller
+swiftc -module-cache-path /tmp/docky-test-module-cache Docky/Services/DockWindowInteractionPolicy.swift scripts/test_dock_window_interaction.swift -o /tmp/test-dock-window-interaction
+/tmp/test-dock-window-interaction
+```
+
+The native lifecycle test requires access to WindowServer.
+
+## Fork changes — 0.9.11
+
+- Edge-attached dragging, optional border resizing, and a dotted collapse/expand bar.
+- A screen diagram with all 12 position/orientation targets, available in Settings and on bar right-click.
+- Stable corner snapping: drag geometry is fixed for each gesture; corners snap within 24 pt and release after 36 pt of retreat.
+- Unpinned running apps before the pinned section; flush screen-edge placement.
+- Preview corner styles, tighter spacing, readable titles, clearer selection, adaptive borders and a native shadow.
+- Correct floating-panel window level and native movement/fullscreen-tiling restrictions.
+
 ## Fork changes — 0.9.10
 
 This fork includes the following customizations on top of upstream v0.9.7:

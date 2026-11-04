@@ -42,6 +42,7 @@ final class MainWindowController: NSWindowController {
 
     override func showWindow(_ sender: Any?) {
         super.showWindow(sender)
+        (window as? MainWindow)?.refreshFloatingPlacement()
         dockEditorHintWindowController?.scheduleInitialPresentation()
     }
 }

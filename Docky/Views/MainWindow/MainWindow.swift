@@ -9,6 +9,45 @@ import AppKit
 import Combine
 import SwiftUI
 
+/// One inset calculation shared by hosting constraints, chrome hit-testing,
+/// and panel sizing. Outer padding must never separate an attached edge from
+/// the display; tile padding remains inside the chrome.
+@MainActor
+private enum DockWindowContentInsets {
+    static var current: NSEdgeInsets {
+        let preferences = DockyPreferences.shared
+        guard preferences.effectiveWindowAxisSizing != .fullAxis else {
+            return NSEdgeInsetsZero
+        }
+        var insets = NSEdgeInsets(
+            top: preferences.effectiveWindowContentInsetTop,
+            left: preferences.effectiveWindowContentInsetLeading,
+            bottom: preferences.effectiveWindowContentInsetBottom,
+            right: preferences.effectiveWindowContentInsetTrailing
+        )
+        let position = preferences.windowPosition.resolved(systemOrientation: DockSettingsService.shared.orientation)
+        switch position {
+        case .left: insets.left = 0
+        case .right: insets.right = 0
+        case .top: insets.top = 0
+        case .bottom: insets.bottom = 0
+        }
+        if preferences.windowPosition.isFree {
+            let offset = DockPlacementPreferences.shared.offset
+            if position.isVertical {
+                if offset < 0.001 { insets.bottom = 0 }
+                if offset > 0.999 { insets.top = 0 }
+            } else {
+                if offset < 0.001 { insets.left = 0 }
+                if offset > 0.999 { insets.right = 0 }
+            }
+        } else if preferences.windowPosition == .bottomLeft {
+            insets.bottom = 0
+        }
+        return insets
+    }
+}
+
 final class MainWindowContainerView: NSView {
     private let contentView = ClickThroughHostingView(rootView: MainWindowView())
     private var trackingArea: NSTrackingArea?
@@ -52,21 +91,18 @@ final class MainWindowContainerView: NSView {
         observePreferencesForInsets()
     }
 
-    /// Re-applies the per-edge content padding. Full-axis mode forces
-    /// every edge to 0 so the chrome bleeds to the panel border; in
-    /// fit-content mode each edge picks up its own theme/user override
-    /// from `DockyPreferences`.
-    private func applyContentInsets() {
-        let prefs = DockyPreferences.shared
-        let fullAxis = prefs.effectiveWindowAxisSizing == .fullAxis
-        let top = fullAxis ? 0 : prefs.effectiveWindowContentInsetTop
-        let leading = fullAxis ? 0 : prefs.effectiveWindowContentInsetLeading
-        let bottom = fullAxis ? 0 : prefs.effectiveWindowContentInsetBottom
-        let trailing = fullAxis ? 0 : prefs.effectiveWindowContentInsetTrailing
-        topConstraint.constant = top
-        bottomConstraint.constant = bottom
-        leadingConstraint.constant = leading
-        trailingConstraint.constant = trailing
+    func placementPoint(fromWindow point: CGPoint) -> CGPoint {
+        let local = contentView.convert(point, from: nil)
+        return contentView.isFlipped ? local : CGPoint(x: local.x, y: contentView.bounds.height - local.y)
+    }
+
+    /// Re-apply the same outer insets used by frame sizing and chrome geometry.
+    func applyContentInsets() {
+        let insets = DockWindowContentInsets.current
+        topConstraint.constant = insets.top
+        bottomConstraint.constant = insets.bottom
+        leadingConstraint.constant = insets.left
+        trailingConstraint.constant = insets.right
     }
 
     /// Observation-framework wiring: every read inside the closure is
@@ -75,11 +111,7 @@ final class MainWindowContainerView: NSView {
     /// the project uses to bridge from `@Observable` into NSView land.
     private func observePreferencesForInsets() {
         withObservationTracking {
-            _ = DockyPreferences.shared.effectiveWindowAxisSizing
-            _ = DockyPreferences.shared.effectiveWindowContentInsetTop
-            _ = DockyPreferences.shared.effectiveWindowContentInsetLeading
-            _ = DockyPreferences.shared.effectiveWindowContentInsetBottom
-            _ = DockyPreferences.shared.effectiveWindowContentInsetTrailing
+            _ = DockWindowContentInsets.current
         } onChange: { [weak self] in
             DispatchQueue.main.async {
                 guard let self else { return }
@@ -233,8 +265,6 @@ final class MainWindow: NSPanel {
     override var canBecomeKey: Bool { Self.allowsKeyWindow }
     override var canBecomeMain: Bool { false }
 
-    override var level: NSWindow.Level { get { .mainMenu } set {} }
-
     private enum VisibilityState {
         case visible
         case hidden
@@ -246,6 +276,7 @@ final class MainWindow: NSPanel {
     private let dockSettings = DockSettingsService.shared
     private let preferences = DockyPreferences.shared
     private let layout = DockLayoutService.shared
+    private lazy var floatingControls = FloatingDockController(mainWindow: self)
     private let tileStore = TileStore.shared
     private let editMode = DockEditModeService.shared
     private let minimumWidth: CGFloat = 120
@@ -268,17 +299,19 @@ final class MainWindow: NSPanel {
     private var isMaximizedActiveOnTargetScreen = false
 
     private var fullscreenHidingActive: Bool {
-        isFullscreenActiveOnTargetScreen && preferences.hidesDuringFullscreen
+        !preferences.windowPosition.isFree && isFullscreenActiveOnTargetScreen && preferences.hidesDuringFullscreen
     }
 
     private var effectivelyAutohides: Bool {
-        preferences.autohidesWindow
+        guard !preferences.windowPosition.isFree else { return false }
+        return preferences.autohidesWindow
             || fullscreenHidingActive
             || (isMaximizedActiveOnTargetScreen && preferences.maximizedWindowBehavior == .hideDocky)
     }
 
     private var isContentOverlapActive: Bool {
-        fullscreenHidingActive
+        guard !preferences.windowPosition.isFree else { return false }
+        return fullscreenHidingActive
             || (isMaximizedActiveOnTargetScreen && preferences.maximizedWindowBehavior == .hideDocky)
     }
 
@@ -307,7 +340,7 @@ final class MainWindow: NSPanel {
     /// keep other apps' windows out of Docky's way. Only the chrome's depth
     /// counts, so the magnification headroom does not push windows away.
     var currentReservationFrame: CGRect? {
-        guard visibilityState == .visible else { return nil }
+        guard visibilityState == .visible, !preferences.windowPosition.isFree else { return nil }
         let frame = restFrame
         guard let chrome = chromeScreenFrame() else { return frame }
         // A window edge must not land on the chrome's border.
@@ -338,7 +371,11 @@ final class MainWindow: NSPanel {
         guard chromeSize.width > 0, chromeSize.height > 0 else { return nil }
         let position = DockyPreferences.shared.windowPosition
             .resolved(systemOrientation: DockSettingsService.shared.orientation)
-        let f = restFrame
+        let insets = DockWindowContentInsets.current
+        let rest = restFrame
+        let f = CGRect(x: rest.minX + insets.left, y: rest.minY + insets.bottom,
+                       width: max(0, rest.width - insets.left - insets.right),
+                       height: max(0, rest.height - insets.top - insets.bottom))
         let width = min(chromeSize.width, f.width)
         let height = min(chromeSize.height, f.height)
         switch position {
@@ -354,10 +391,10 @@ final class MainWindow: NSPanel {
     }
 
     override init(contentRect: NSRect, styleMask style: NSWindow.StyleMask, backing backingStoreType: NSWindow.BackingStoreType, defer flag: Bool) {
-        visibilityState = DockyPreferences.shared.autohidesWindow ? .hidden : .visible
+        visibilityState = DockyPreferences.shared.autohidesWindow && !DockyPreferences.shared.windowPosition.isFree ? .hidden : .visible
         // Force `.nonactivatingPanel` regardless of what the XIB hands us so
-        // tile clicks never bring Docky to the foreground. Other bits stay
-        // intact (the XIB-supplied mask covers titled/resizable/etc.).
+        // tile clicks never bring Docky to the foreground. Native window
+        // dragging/resizing is disabled by the dock interaction policy.
         super.init(
             contentRect: contentRect,
             styleMask: style.union(.nonactivatingPanel),
@@ -463,6 +500,8 @@ final class MainWindow: NSPanel {
             _ = preferences.overflowBehavior
             _ = preferences.effectiveWindowAxisSizing
             _ = preferences.windowPosition
+            _ = DockPlacementPreferences.shared.isCollapsed
+            _ = DockPlacementPreferences.shared.displaysControlTile
             _ = preferences.windowDisplayTarget
             _ = dockSettings.orientation
             _ = dockSettings.tileSize
@@ -584,6 +623,8 @@ final class MainWindow: NSPanel {
     private func observeVisibilityInputs() {
         observeChanges { [weak self] in
             _ = DockyPreferences.shared.autohidesWindow
+            _ = DockyPreferences.shared.windowPosition
+            self?.updatePointerScreenMonitoring()
             self?.applyEffectiveVisibility(animated: true)
         }
         .store(in: &cancellables)
@@ -598,6 +639,8 @@ final class MainWindow: NSPanel {
 
     private func applyCollectionBehavior() {
         collectionBehavior = preferences.windowSpaceBehavior.collectionBehavior(includesFullScreenAuxiliary: true)
+        DockWindowInteractionPolicy.apply(to: self)
+        floatingControls.synchronizeSpaceBehavior()
     }
 
     private func updatePointerScreenMonitoring() {
@@ -610,7 +653,7 @@ final class MainWindow: NSPanel {
             self.localPointerMonitor = nil
         }
 
-        guard preferences.windowDisplayTarget == .displayContainingPointer else { return }
+        guard !preferences.windowPosition.isFree, preferences.windowDisplayTarget == .displayContainingPointer else { return }
 
         let pointerEvents: NSEvent.EventTypeMask = [.mouseMoved, .leftMouseDragged, .rightMouseDragged, .otherMouseDragged, .scrollWheel]
         if PermissionsService.shared.accessibility == .granted {
@@ -660,7 +703,7 @@ final class MainWindow: NSPanel {
     }
 
     private func handlePointerScreenChangeIfNeeded() {
-        guard preferences.windowDisplayTarget == .displayContainingPointer else { return }
+        guard !preferences.windowPosition.isFree, preferences.windowDisplayTarget == .displayContainingPointer else { return }
         let nextScreenFrame = targetScreen()?.frame
         guard nextScreenFrame != lastPointerScreenFrame else { return }
         lastPointerScreenFrame = nextScreenFrame
@@ -789,6 +832,14 @@ final class MainWindow: NSPanel {
         applyCurrentFrame(animated: animated)
     }
 
+    func placementPoint(fromWindow point: CGPoint) -> CGPoint {
+        (contentView as? MainWindowContainerView)?.placementPoint(fromWindow: point) ?? .zero
+    }
+
+    func refreshFloatingPlacement() {
+        applyCurrentFrame(animated: false)
+    }
+
     private func applyCurrentFrame(animated: Bool) {
         applyCurrentFrame(animated: animated, duration: nil)
     }
@@ -806,16 +857,13 @@ final class MainWindow: NSPanel {
         // Horizontal positions stay anchored to `screen.frame` so a
         // top dock keeps anchoring to the top edge, etc.
         let visibleBounds = resolvedScreen?.visibleFrame ?? screenBounds
-        // Window-frame math needs the *total* horizontal and vertical
-        // padding the chrome view leaves around itself inside the panel.
-        // Per-edge insets live in `DockyPreferences`; full-axis mode
-        // forces them to zero in `MainWindowContainerView` and we
-        // mirror that here so the panel sizing stays in sync.
+        // Keep hosting constraints, visible chrome and panel size in sync.
+        // Attached edges have no external gap; internal icon padding is unchanged.
+        (contentView as? MainWindowContainerView)?.applyContentInsets()
+        let insets = DockWindowContentInsets.current
         let fullAxis = preferences.effectiveWindowAxisSizing == .fullAxis
-        let horizontalContentPadding: CGFloat = fullAxis ? 0
-            : preferences.effectiveWindowContentInsetLeading + preferences.effectiveWindowContentInsetTrailing
-        let verticalContentPadding: CGFloat = fullAxis ? 0
-            : preferences.effectiveWindowContentInsetTop + preferences.effectiveWindowContentInsetBottom
+        let horizontalContentPadding = insets.left + insets.right
+        let verticalContentPadding = insets.top + insets.bottom
         let position = preferences.windowPosition.resolved(systemOrientation: dockSettings.orientation)
         let baseTileSize = dockSettings.displayTileSize
         let baseTileHeight = baseTileSize + preferences.effectiveTileVerticalPadding * 2
@@ -835,7 +883,7 @@ final class MainWindow: NSPanel {
             }
             return tile
         }()
-        let sizingTiles = TileContainerView.previewedTiles(
+        let sizingTiles = DockPlacementPreferences.shared.isCollapsed ? [] : TileContainerView.previewedTiles(
             from: tileStore.tiles,
             paletteDrag: editMode.paletteDrag,
             paletteDropDestination: editMode.paletteDropDestination,
@@ -847,10 +895,12 @@ final class MainWindow: NSPanel {
             tileSize: baseTileSize,
             tileHeight: baseTileHeight,
             tileSpacing: preferences.effectiveTileSpacing,
-            position: position
+            position: position,
+            includesDockControl: DockPlacementPreferences.shared.displaysControlTile
         )
         let alongAxisContentPadding = position.isVertical ? verticalContentPadding : horizontalContentPadding
-        let layoutBounds = position.isVertical ? visibleBounds : screenBounds
+        let isFree = preferences.windowPosition.isFree
+        let layoutBounds = isFree || position.isVertical ? visibleBounds : screenBounds
         let unreservedAvailableAxisLength = max(
             0,
             axisLength(of: layoutBounds.size, position: position) - alongAxisContentPadding
@@ -867,6 +917,15 @@ final class MainWindow: NSPanel {
         let availableAxisLength = preferences.effectiveWindowAxisSizing == .fullAxis
             ? unreservedAvailableAxisLength
             : contentAvailableAxisLength
+        // Explicit border resizing requests a visible size. Uniformly
+        // rescaling an overflowing dock would cancel that request (most
+        // noticeably the width of a long vertical dock). Keep the requested
+        // icon size and let the existing scroll layout handle excess length.
+        if floatingControls.isResizing,
+           preferences.overflowBehavior == .rescale,
+           axisLength(of: naturalContentSize, position: position) > availableAxisLength {
+            preferences.overflowBehavior = .scroll
+        }
         let compactsWidgetsForOverflow = shouldCompactWidgetsForOverflow(
             contentSize: naturalContentSize,
             availableAxisLength: availableAxisLength,
@@ -878,7 +937,8 @@ final class MainWindow: NSPanel {
             tileHeight: baseTileHeight,
             tileSpacing: preferences.effectiveTileSpacing,
             position: position,
-            compactWidgets: compactsWidgetsForOverflow
+            compactWidgets: compactsWidgetsForOverflow,
+            includesDockControl: DockPlacementPreferences.shared.displaysControlTile
         )
         let contentScale = overflowContentScale(
             for: baseContentSize,
@@ -898,7 +958,8 @@ final class MainWindow: NSPanel {
             tileSpacing: scaledTileSpacing,
             position: position,
             compactWidgets: compactsWidgetsForOverflow,
-            edgePadding: TileContainerView.edgePadding * contentScale
+            edgePadding: TileContainerView.edgePadding * contentScale,
+            includesDockControl: DockPlacementPreferences.shared.displaysControlTile
         )
         let displayedChromeAxisLength = preferences.effectiveWindowAxisSizing == .fullAxis
             ? availableAxisLength
@@ -908,9 +969,9 @@ final class MainWindow: NSPanel {
             displayedAxisLength: displayedChromeAxisLength,
             position: position
         ))
-        // Keep the chrome stretched across the current dock axis even when the
-        // tile layout itself remains content-sized.
-        let displayedAxisLength = preferences.windowPosition == .bottomLeft && !fullAxis
+        // Free placement and Bottom Left use a content-sized resting frame;
+        // existing edge modes retain their full-axis tile canvas.
+        let displayedAxisLength = (isFree || DockPlacementPreferences.shared.isCollapsed || preferences.windowPosition == .bottomLeft) && !fullAxis
             ? displayedChromeAxisLength : availableAxisLength
         // Magnified icons render beyond the chrome's natural cross-axis
         // extent. We grow only the window, not the chrome rect, so the
@@ -945,12 +1006,17 @@ final class MainWindow: NSPanel {
             position: position
         )
         let size = CGSize(width: width, height: height)
-        let origin = frameOrigin(
-            in: layoutBounds,
-            size: size,
-            position: position,
-            visibilityState: visibilityState
-        )
+        let origin: CGPoint
+        if isFree, let resolvedScreen {
+            origin = floatingControls.origin(for: size, screen: resolvedScreen)
+        } else {
+            origin = frameOrigin(
+                in: layoutBounds,
+                size: size,
+                position: position,
+                visibilityState: visibilityState
+            )
+        }
 
         let restFrame = CGRect(origin: origin, size: size)
         revealTriggerZone = makeRevealTriggerZone(in: layoutBounds, frame: restFrame, position: position)
@@ -965,6 +1031,13 @@ final class MainWindow: NSPanel {
         let frame: CGRect
         if !extendsAlongAxis {
             frame = restFrame
+        } else if isFree {
+            // Keep magnification room local to the floating dock rather
+            // than creating a transparent window across the whole screen.
+            let expanded = position.isVertical
+                ? restFrame.insetBy(dx: 0, dy: -magnificationHeadroom)
+                : restFrame.insetBy(dx: -magnificationHeadroom, dy: 0)
+            frame = expanded.intersection(visibleBounds)
         } else if position.isVertical {
             frame = CGRect(x: restFrame.minX, y: layoutBounds.minY, width: restFrame.width, height: layoutBounds.height)
         } else {
@@ -986,7 +1059,10 @@ final class MainWindow: NSPanel {
             leading: restFrameInsets.leading,
             trailing: restFrameInsets.trailing
         )
-        applyFrame(frame, animated: animated, duration: duration)
+        applyFrame(frame, animated: animated && !isFree, duration: duration)
+        if let resolvedScreen {
+            floatingControls.synchronize(dockFrame: restFrame, screen: resolvedScreen, isFree: isFree)
+        }
     }
 
     private func applyFrame(_ frame: CGRect, animated: Bool, duration: TimeInterval?) {
@@ -1068,9 +1144,10 @@ final class MainWindow: NSPanel {
             return contentSize.width + horizontalContentPadding
         }
 
+        let minimum = preferences.windowPosition.isFree || DockPlacementPreferences.shared.isCollapsed ? 0 : minimumWidth
         let visibleAxisLength = availableAxisLength > 0
-            ? min(max(minimumWidth, displayedAxisLength), availableAxisLength)
-            : max(minimumWidth, displayedAxisLength)
+            ? min(max(minimum, displayedAxisLength), availableAxisLength)
+            : max(minimum, displayedAxisLength)
         return visibleAxisLength + horizontalContentPadding
     }
 
@@ -1153,6 +1230,9 @@ final class MainWindow: NSPanel {
     }
 
     private func targetScreen() -> NSScreen? {
+        if preferences.windowPosition.isFree {
+            return floatingControls.savedScreen ?? NSScreen.screens.first ?? NSScreen.main
+        }
         switch preferences.windowDisplayTarget {
         case .primaryDisplay:
             return NSScreen.screens.first ?? NSScreen.main
@@ -1192,6 +1272,9 @@ final class MainWindow: NSPanel {
     }
 
     private func computeContentOverlapStateOnTargetScreen() -> ContentOverlapObservation {
+        guard !preferences.windowPosition.isFree else {
+            return ContentOverlapObservation(isFullscreen: false, isMaximized: false)
+        }
         guard let screen = targetScreen(),
               let primaryScreenHeight = NSScreen.screens.first?.frame.height
         else {
