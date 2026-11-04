@@ -31,14 +31,20 @@ enum PreviewCornerStyle: String, CaseIterable, Identifiable {
     static let shared = PreviewAppearancePreferences()
     private let defaults: UserDefaults
     private static let cornerStyleKey = "docky.preview.cornerStyle"
+    private static let highlightHoveredWindowKey = "docky.preview.highlightHoveredWindow"
 
     var cornerStyle: PreviewCornerStyle {
         didSet { defaults.set(cornerStyle.rawValue, forKey: Self.cornerStyleKey) }
+    }
+
+    var highlightsHoveredWindow: Bool {
+        didSet { defaults.set(highlightsHoveredWindow, forKey: Self.highlightHoveredWindowKey) }
     }
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
         cornerStyle = defaults.string(forKey: Self.cornerStyleKey)
             .flatMap(PreviewCornerStyle.init(rawValue:)) ?? .subtle
+        highlightsHoveredWindow = defaults.object(forKey: Self.highlightHoveredWindowKey) as? Bool ?? true
     }
 }

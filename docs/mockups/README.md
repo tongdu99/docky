@@ -50,3 +50,9 @@ One diagram shows all 12 positions without a separate orientation switch. An opt
 [SVG](preview-contrast-revision5.svg) · [PNG](preview-contrast-revision5.png)
 
 A fine preview-panel border and soft shadow clarify the panel against a white background. Unselected cards receive a neutral outline. The dotted bar has no separate fill, letting the existing dock material show through. Rendered, inspected, and approved by the user. Implemented in thumbnail and list hover previews; the dotted bar draws directly over the dock material.
+
+## Hover-window highlight — awaiting approval
+
+[SVG](hover-window-highlight-proposal.svg) · [PNG](hover-window-highlight-proposal.png)
+
+Approved keyboard-switcher-style In Place highlighting after 150 ms hover: dim the desktop, show the window at its screen position, retain the interactive thumbnail popup, and restore the desktop on exit. Click still activates the selected window. Optional setting under Window Management → Window Preview. Rendered, inspected, and approved by the user. Implemented on `main` with a default-on optional setting and cancellation guards for stale captures.

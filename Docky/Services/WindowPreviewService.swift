@@ -32,6 +32,10 @@ final class WindowPreviewService: ObservableObject {
     }
 
     private var previewSubscription: AnyCancellable?
+    private var highlightSubscriptions = Set<AnyCancellable>()
+    private var highlightTask: Task<Void, Never>?
+    private var highlightRequestID = UUID()
+    private var hoveredWindowIdentifier: String?
 
     private init() {
         previewSubscription = WorkspaceService.shared.$appWindowPreviews
@@ -39,6 +43,20 @@ final class WindowPreviewService: ObservableObject {
             .sink { [weak self] previews in
                 self?.mergeWindowPreviews(previews)
             }
+        observeChanges { [weak self] in
+            _ = PreviewAppearancePreferences.shared.highlightsHoveredWindow
+            self?.refreshHoveredWindowHighlight()
+        }.store(in: &highlightSubscriptions)
+        PermissionsService.shared.$screenCapture
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.refreshHoveredWindowHighlight()
+            }.store(in: &highlightSubscriptions)
+        WindowSwitcherService.shared.$isPresented
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.refreshHoveredWindowHighlight()
+            }.store(in: &highlightSubscriptions)
     }
 
     private func mergeWindowPreviews(_ previews: [String: NSImage]) {
@@ -98,6 +116,7 @@ final class WindowPreviewService: ObservableObject {
             return false
         }
 
+        clearHoveredWindow()
         windows = aggregated
         windowPreviews = freezePreviews(for: aggregated)
         selectedWindowIdentifier = aggregated.first?.windowIdentifier
@@ -107,6 +126,7 @@ final class WindowPreviewService: ObservableObject {
     }
 
     func dismiss() {
+        clearHoveredWindow()
         windows = []
         windowPreviews = [:]
         selectedWindowIdentifier = nil
@@ -127,6 +147,7 @@ final class WindowPreviewService: ObservableObject {
 
     func setContextMenuPresented(_ presented: Bool) {
         isContextMenuPresented = presented
+        refreshHoveredWindowHighlight()
     }
 
     func windowPreview(for window: AppWindow) -> NSImage? {
@@ -135,6 +156,7 @@ final class WindowPreviewService: ObservableObject {
 
     func removeWindow(withIdentifier identifier: String) {
         guard let index = windows.firstIndex(where: { $0.windowIdentifier == identifier }) else { return }
+        if hoveredWindowIdentifier == identifier { clearHoveredWindow() }
         windows.remove(at: index)
         windowPreviews.removeValue(forKey: identifier)
 
@@ -150,6 +172,93 @@ final class WindowPreviewService: ObservableObject {
             let nextIndex = min(index, windows.count - 1)
             selectedWindowIdentifier = windows[nextIndex].windowIdentifier
         }
+    }
+
+    /// Selection remains immediate; the desktop highlight waits for deliberate hover.
+    func setWindowHovered(_ identifier: String, isHovered: Bool) {
+        if !isHovered {
+            if hoveredWindowIdentifier == identifier { clearHoveredWindow() }
+            return
+        }
+        selectWindow(withIdentifier: identifier)
+        guard hoveredWindowIdentifier != identifier else { return }
+        clearHoveredWindow()
+        guard windows.contains(where: { $0.windowIdentifier == identifier }) else { return }
+        hoveredWindowIdentifier = identifier
+        refreshHoveredWindowHighlight()
+    }
+
+    private func refreshHoveredWindowHighlight() {
+        cancelHighlightCapture()
+        guard let identifier = hoveredWindowIdentifier else { return }
+        guard canHighlight else {
+            NSLog("[Docky] Hover highlight suspended: enabled=%@, screenCapture=%@, switcher=%@, menu=%@",
+                  String(PreviewAppearancePreferences.shared.highlightsHoveredWindow),
+                  String(PermissionsService.shared.screenCapture == .granted),
+                  String(WindowSwitcherService.shared.isPresented), String(isContextMenuPresented))
+            return
+        }
+        let requestID = highlightRequestID
+        highlightTask = Task { [weak self] in
+            do { try await Task.sleep(for: .milliseconds(150)) } catch { return }
+            guard let self else { return }
+            // A slow live capture must not hide an already available thumbnail.
+            var hasShownCachedPreview = false
+            // Use independent captures, leaving the keyboard switcher's live stream alone.
+            while self.isCurrentHighlight(identifier, requestID: requestID) {
+                guard let original = self.windows.first(where: { $0.windowIdentifier == identifier }),
+                      let window = WorkspaceService.shared.appWindows(bundleIdentifier: original.bundleIdentifier)
+                        .first(where: { $0.windowIdentifier == identifier }),
+                      !window.isMinimized, WindowRegistry.shared.isCapturable(window),
+                      let bounds = window.screenBounds, !bounds.isEmpty else {
+                    self.clearHoveredWindow()
+                    return
+                }
+                if !hasShownCachedPreview,
+                   let cachedImage = self.windowPreviews[identifier]
+                    ?? WorkspaceService.shared.appWindowPreview(for: window) {
+                    HoverWindowHighlightWindowController.shared.show(FocusedWindowPreview(
+                        windowIdentifier: identifier, image: cachedImage, screenBounds: bounds
+                    ))
+                    hasShownCachedPreview = true
+                }
+                let image = await WorkspaceService.shared.liveFocusPreviewImage(for: window)
+                // Capture may finish after an exit, another hover, or a new popup.
+                guard self.isCurrentHighlight(identifier, requestID: requestID) else { return }
+                if let image {
+                    HoverWindowHighlightWindowController.shared.show(FocusedWindowPreview(
+                        windowIdentifier: identifier, image: image, screenBounds: bounds
+                    ))
+                } else if !hasShownCachedPreview {
+                    HoverWindowHighlightWindowController.shared.dismiss()
+                }
+                do { try await Task.sleep(for: .milliseconds(120)) } catch { return }
+            }
+        }
+    }
+
+    func clearHoveredWindow() {
+        hoveredWindowIdentifier = nil
+        cancelHighlightCapture()
+    }
+
+    private func cancelHighlightCapture() {
+        highlightRequestID = UUID()
+        highlightTask?.cancel()
+        highlightTask = nil
+        HoverWindowHighlightWindowController.shared.dismiss()
+    }
+
+    private var canHighlight: Bool {
+        PreviewAppearancePreferences.shared.highlightsHoveredWindow
+            && PermissionsService.shared.screenCapture == .granted
+            && presentedSourceTileID != nil && !isContextMenuPresented
+            && !WindowSwitcherService.shared.isPresented
+    }
+
+    private func isCurrentHighlight(_ identifier: String, requestID: UUID) -> Bool {
+        !Task.isCancelled && requestID == highlightRequestID
+            && hoveredWindowIdentifier == identifier && canHighlight
     }
 
     private func freezePreviews(for windows: [AppWindow]) -> [String: NSImage] {

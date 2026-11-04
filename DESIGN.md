@@ -107,3 +107,17 @@
 - Capture chrome size/anchor at gesture start instead of feeding live panel size (which changes at corner endpoints) back into offset calculations.
 - Snap within 24 pt; hold until a deliberate 36 pt retreat. Reset the latch when the edge, display, or gesture changes.
 - Keep monitor-dwell polling active; unchanged placement updates do not rewrite preferences or relayout the dock.
+
+## Hover-window highlight experiment
+- Branch: `codex/hover-window-highlight`, based on the merged/pushed 0.9.11 main.
+- Review reference: `docs/mockups/hover-window-highlight-proposal.svg` (rendered and inspected).
+- Interpret requested keyboard-switcher-style highlight as the existing In Place behavior: dim the desktop and display the hovered window capture at its screen bounds, without activating the app.
+- Trigger only after explicit thumbnail/row hover, with 150 ms dwell; changing hover cancels stale capture. Leaving the popup, dismissal, menu presentation, or clicking to activate clears the highlight.
+- Add an optional Highlight hovered window setting in Window Management → Window Preview. The visual overlay ignores mouse input so the dock and popup remain usable.
+- Reuse existing capture/cache support; handle minimized or uncapturable windows without inventing a desktop position. Preserve normal thumbnail fallback.
+- User approved the rendered SVG. Implemented as a nonactivating, mouse-transparent overlay below the dock and preview popup. The setting defaults on for this experiment; disabling it or opening the keyboard switcher clears the overlay.
+
+### Hover highlight recovery
+- After the dwell, use an existing thumbnail immediately while requesting a full-size capture, so a stalled capture does not prevent visual feedback.
+- Preserve physical hover during temporary setting, permission, menu, or keyboard-switcher interruptions; restart after the dwell when eligible again. Exit and dismissal still cancel all pending work.
+- Validate thumbnail and list-row hover callbacks against their originating popup presentation, including delayed exits from replaced hosting views.

@@ -27,9 +27,18 @@ custom icons, and scripted actions.
   <img src="docs/images/hero.jpg" alt="Docky on macOS" width="900">
 </div>
 
+## Hover window highlight experiment
+
+On `main`, hover a thumbnail or window row for 150 ms
+to highlight that window in place against a dimmed desktop. Clicking activates
+the window; leaving the preview restores the desktop without changing focus.
+Toggle **Settings → Window Management → Window Preview → Highlight hovered window**
+to disable it. Screen Recording permission is required; minimized or unavailable
+windows keep their normal preview without the desktop highlight.
+
 ## Dock controls — 0.9.11
 
-On `codex/draggable-collapsible-dock`, open **Settings → Behavior → Placement**
+On `main`, open **Settings → Behavior → Placement**
 to choose among 12 miniature docks in a screen diagram. Each target sets both
 position and orientation in one click; corners offer both orientations.
 Enable **Show control bar in the dock** for an optional dotted bar:

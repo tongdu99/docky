@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="740" viewBox="0 0 1080 740"><title>Docky hover window highlight proposal</title><defs><filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="9" stdDeviation="16" flood-color="#081223" flood-opacity=".4"/></filter></defs><rect width="1080" height="740" fill="#f3f6fa"/>
+<text x="30" y="32" font-family="Helvetica,Arial,sans-serif" font-size="12" fill="#2569c8" font-weight="700">HOVER HIGHLIGHT · PROPOSAL FOR REVIEW</text>
+<text x="30" y="72" font-family="Helvetica,Arial,sans-serif" font-size="29" fill="#243247" font-weight="700">Hover a thumbnail. See its window in place.</text>
+<text x="30" y="103" font-family="Helvetica,Arial,sans-serif" font-size="17" fill="#58687d" font-weight="400">Use the keyboard switcher’s In Place appearance for dock previews.</text>
+<rect x="30" y="127" width="1020" height="438" rx="10" fill="#9db5ce" stroke="#abb8c8" />
+<rect x="80" y="164" width="438" height="288" rx="8" fill="#e6edf6" stroke="#8a9aae" />
+<rect x="80" y="164" width="438" height="28" rx="8" fill="#cbd7e7" stroke="none" />
+<rect x="610" y="157" width="385" height="333" rx="8" fill="#e7edf4" stroke="#8a9aae" />
+<rect x="610" y="157" width="385" height="28" rx="8" fill="#cbd7e7" stroke="none" />
+<rect x="100" y="212" width="280" height="7" rx="3" fill="#a4b7d0" stroke="none" />
+<rect x="100" y="239" width="350" height="7" rx="3" fill="#a4b7d0" stroke="none" />
+<rect x="100" y="266" width="280" height="7" rx="3" fill="#a4b7d0" stroke="none" />
+<rect x="100" y="293" width="350" height="7" rx="3" fill="#a4b7d0" stroke="none" />
+<rect x="100" y="320" width="280" height="7" rx="3" fill="#a4b7d0" stroke="none" />
+<rect x="100" y="347" width="350" height="7" rx="3" fill="#a4b7d0" stroke="none" />
+<rect x="100" y="374" width="280" height="7" rx="3" fill="#a4b7d0" stroke="none" />
+<rect x="30" y="127" width="1020" height="438" rx="10" fill="#101927" stroke="none" fill-opacity=".60"/>
+<rect x="330" y="175" width="648" height="263" rx="8" fill="#fff" stroke="#c0ccdc" filter="url(#shadow)"/>
+<rect x="330" y="175" width="648" height="30" rx="8" fill="#e9edf3" stroke="none" />
+<text x="350" y="195" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#3c4d64" font-weight="600">Calendar · Week</text>
+<rect x="350" y="222" width="88" height="34" rx="3" fill="#d8e9ff" stroke="none" />
+<rect x="350" y="269" width="88" height="34" rx="3" fill="#dcf0e4" stroke="none" />
+<rect x="350" y="316" width="88" height="34" rx="3" fill="#f7e4cc" stroke="none" />
+<rect x="350" y="363" width="88" height="34" rx="3" fill="#d8e9ff" stroke="none" />
+<rect x="450" y="222" width="88" height="34" rx="3" fill="#dcf0e4" stroke="none" />
+<rect x="450" y="269" width="88" height="34" rx="3" fill="#f7e4cc" stroke="none" />
+<rect x="450" y="316" width="88" height="34" rx="3" fill="#d8e9ff" stroke="none" />
+<rect x="450" y="363" width="88" height="34" rx="3" fill="#dcf0e4" stroke="none" />
+<rect x="550" y="222" width="88" height="34" rx="3" fill="#f7e4cc" stroke="none" />
+<rect x="550" y="269" width="88" height="34" rx="3" fill="#d8e9ff" stroke="none" />
+<rect x="550" y="316" width="88" height="34" rx="3" fill="#dcf0e4" stroke="none" />
+<rect x="550" y="363" width="88" height="34" rx="3" fill="#f7e4cc" stroke="none" />
+<rect x="650" y="222" width="88" height="34" rx="3" fill="#d8e9ff" stroke="none" />
+<rect x="650" y="269" width="88" height="34" rx="3" fill="#dcf0e4" stroke="none" />
+<rect x="650" y="316" width="88" height="34" rx="3" fill="#f7e4cc" stroke="none" />
+<rect x="650" y="363" width="88" height="34" rx="3" fill="#d8e9ff" stroke="none" />
+<rect x="750" y="222" width="88" height="34" rx="3" fill="#dcf0e4" stroke="none" />
+<rect x="750" y="269" width="88" height="34" rx="3" fill="#f7e4cc" stroke="none" />
+<rect x="750" y="316" width="88" height="34" rx="3" fill="#d8e9ff" stroke="none" />
+<rect x="750" y="363" width="88" height="34" rx="3" fill="#dcf0e4" stroke="none" />
+<rect x="850" y="222" width="88" height="34" rx="3" fill="#f7e4cc" stroke="none" />
+<rect x="850" y="269" width="88" height="34" rx="3" fill="#d8e9ff" stroke="none" />
+<rect x="850" y="316" width="88" height="34" rx="3" fill="#dcf0e4" stroke="none" />
+<rect x="850" y="363" width="88" height="34" rx="3" fill="#f7e4cc" stroke="none" />
+<rect x="36" y="215" width="49" height="322" rx="8" fill="#dde5ee" stroke="#98a9bc" />
+<circle cx="53" cy="227" r="1" fill="#63748a"/>
+<circle cx="53" cy="233" r="1" fill="#63748a"/>
+<circle cx="60" cy="227" r="1" fill="#63748a"/>
+<circle cx="60" cy="233" r="1" fill="#63748a"/>
+<circle cx="67" cy="227" r="1" fill="#63748a"/>
+<circle cx="67" cy="233" r="1" fill="#63748a"/>
+<rect x="44" y="247" width="33" height="36" rx="8" fill="#448de7" stroke="none" />
+<text x="54" y="272" font-family="Helvetica,Arial,sans-serif" font-size="18" fill="white" font-weight="600">A</text>
+<rect x="44" y="296" width="33" height="36" rx="8" fill="#e0a044" stroke="none" />
+<text x="54" y="321" font-family="Helvetica,Arial,sans-serif" font-size="18" fill="white" font-weight="600">B</text>
+<rect x="44" y="345" width="33" height="36" rx="8" fill="#6ba28b" stroke="none" />
+<text x="54" y="370" font-family="Helvetica,Arial,sans-serif" font-size="18" fill="white" font-weight="600">C</text>
+<rect x="100" y="401" width="454" height="149" rx="6" fill="#fbfcfe" stroke="#9aa8bb" filter="url(#shadow)"/>
+<rect x="108" y="409" width="214" height="133" rx="5" fill="#f5f7fa" stroke="#c7d0dc" />
+<rect x="118" y="419" width="194" height="83" rx="3" fill="#fff" stroke="#d5dfec" />
+<rect x="128" y="430" width="170" height="8" rx="2" fill="#d6e6fa" stroke="none" />
+<rect x="128" y="446" width="145" height="8" rx="2" fill="#d6e6fa" stroke="none" />
+<rect x="128" y="462" width="170" height="8" rx="2" fill="#d6e6fa" stroke="none" />
+<rect x="128" y="478" width="145" height="8" rx="2" fill="#d6e6fa" stroke="none" />
+<text x="120" y="526" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#243247" font-weight="600">Home · Browser</text>
+<rect x="330" y="409" width="214" height="133" rx="5" fill="#e7f0ff" stroke="#2677ed" stroke-width="2"/>
+<rect x="340" y="419" width="194" height="83" rx="3" fill="#fff" stroke="#d5dfec" />
+<rect x="350" y="430" width="170" height="8" rx="2" fill="#d6e6fa" stroke="none" />
+<rect x="350" y="446" width="145" height="8" rx="2" fill="#d6e6fa" stroke="none" />
+<rect x="350" y="462" width="170" height="8" rx="2" fill="#d6e6fa" stroke="none" />
+<rect x="350" y="478" width="145" height="8" rx="2" fill="#d6e6fa" stroke="none" />
+<text x="342" y="526" font-family="Helvetica,Arial,sans-serif" font-size="14" fill="#243247" font-weight="600">Calendar · Week</text>
+<path d="M449 475 L449 504 L456 497 L463 510 L469 506 L462 493 L473 492 Z" fill="white" stroke="#243247" stroke-width="1.3"/>
+<text x="582" y="486" font-family="Helvetica,Arial,sans-serif" font-size="18" fill="#fff" font-weight="600">Hovered window stays bright</text>
+<text x="582" y="512" font-family="Helvetica,Arial,sans-serif" font-size="15" fill="#e6edf6" font-weight="400">The desktop dims behind it.</text>
+<rect x="30" y="588" width="1020" height="124" rx="8" fill="#fff" stroke="none" />
+<text x="52" y="619" font-family="Helvetica,Arial,sans-serif" font-size="15" fill="#243247" font-weight="600">Settings → Window Management → Window Preview</text>
+<text x="52" y="647" font-family="Helvetica,Arial,sans-serif" font-size="16" fill="#243247" font-weight="600">Highlight hovered window</text>
+<rect x="998" y="630" width="32" height="20" rx="10" fill="#2677ed" stroke="none" />
+<circle cx="1020" cy="640" r="8" fill="white"/>
+<text x="52" y="675" font-family="Helvetica,Arial,sans-serif" font-size="15" fill="#58687d" font-weight="400">Hover for 150 ms to highlight. Move away to restore. Click a thumbnail to activate the window.</text>
+<text x="52" y="699" font-family="Helvetica,Arial,sans-serif" font-size="13" fill="#58687d" font-weight="400">The popup remains usable; the visual overlay never captures clicks or changes the active app.</text>
+</svg>

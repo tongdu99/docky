@@ -190,8 +190,14 @@ final class WindowPreviewWindowController: NSWindowController, ObservableObject 
             pendingDismissTask?.cancel()
             pendingDismissTask = nil
         } else {
+            WindowPreviewService.shared.clearHoveredWindow()
             requestDismiss(sourceTileID: sourceTileID)
         }
+    }
+
+    fileprivate func setWindowHovered(_ identifier: String, isHovered: Bool, sourceTileID: String, presentationID: UUID) {
+        guard currentTileID == sourceTileID, self.presentationID == presentationID else { return }
+        WindowPreviewService.shared.setWindowHovered(identifier, isHovered: isHovered)
     }
 
     /// Closes whichever tile's preview is currently showing. Used by the
@@ -321,7 +327,11 @@ private struct WindowPreviewWindowContent: View {
     let presentationID: UUID
 
     var body: some View {
-        WindowPreviewView()
+        WindowPreviewView(onWindowHover: { identifier, isHovered in
+            WindowPreviewWindowController.shared.setWindowHovered(
+                identifier, isHovered: isHovered, sourceTileID: sourceTileID, presentationID: presentationID
+            )
+        })
             .contentShape(Rectangle())
             .padding(.bottom, 8)
             .onHover { isHovering in
@@ -333,6 +343,7 @@ private struct WindowPreviewWindowContent: View {
 // MARK: - SwiftUI views (intentional copies of the switcher's, trimmed)
 
 private struct WindowPreviewView: View {
+    let onWindowHover: (String, Bool) -> Void
     @ObservedObject private var preview = WindowPreviewService.shared
 
     @Bindable private var appearance = PreviewAppearancePreferences.shared
@@ -368,6 +379,7 @@ private struct WindowPreviewView: View {
                         let leadingRadius = isFirst ? edgeContentCornerRadius : innerContentCornerRadius
                         let trailingRadius = isLast ? edgeContentCornerRadius : innerContentCornerRadius
                         WindowPreviewCard(
+                            onWindowHover: onWindowHover,
                             window: window,
                             isSelected: window.windowIdentifier == preview.selectedWindowIdentifier,
                             innerPreviewCornerRadius: innerPreviewCornerRadius,
@@ -400,6 +412,7 @@ private struct WindowPreviewView: View {
 
     private var listLayout: some View {
         WindowPreviewListView(
+            onWindowHover: onWindowHover,
             cornerRadius: containerCornerRadius,
             interiorPadding: interiorPadding
         )
@@ -407,6 +420,7 @@ private struct WindowPreviewView: View {
 }
 
 private struct WindowPreviewCard: View {
+    let onWindowHover: (String, Bool) -> Void
     let window: AppWindow
     let isSelected: Bool
     let innerPreviewCornerRadius: CGFloat
@@ -471,9 +485,7 @@ private struct WindowPreviewCard: View {
         }
         .contentShape(cardShape)
         .onHover { isHovering in
-            if isHovering {
-                preview.selectWindow(withIdentifier: window.windowIdentifier)
-            }
+            onWindowHover(window.windowIdentifier, isHovering)
         }
         .onTapGesture {
             WindowPreviewWindowController.shared.confirm(window)
@@ -569,6 +581,7 @@ private struct WindowPreviewCard: View {
 }
 
 private struct WindowPreviewListView: View {
+    let onWindowHover: (String, Bool) -> Void
     let cornerRadius: CGFloat
     let interiorPadding: CGFloat
 
@@ -596,6 +609,7 @@ private struct WindowPreviewListView: View {
                         let topRadius = isFirst ? edgeRowCornerRadius : innerRowCornerRadius
                         let bottomRadius = isLast ? edgeRowCornerRadius : innerRowCornerRadius
                         WindowPreviewListRow(
+                            onWindowHover: onWindowHover,
                             window: window,
                             isSelected: window.windowIdentifier == preview.selectedWindowIdentifier,
                             height: rowHeight,
@@ -629,6 +643,7 @@ private struct WindowPreviewListView: View {
 }
 
 private struct WindowPreviewListRow: View {
+    let onWindowHover: (String, Bool) -> Void
     let window: AppWindow
     let isSelected: Bool
     let height: CGFloat
@@ -695,9 +710,7 @@ private struct WindowPreviewListRow: View {
         }
         .contentShape(rowShape)
         .onHover { isHovering in
-            if isHovering {
-                preview.selectWindow(withIdentifier: window.windowIdentifier)
-            }
+            onWindowHover(window.windowIdentifier, isHovering)
         }
         .onTapGesture {
             WindowPreviewWindowController.shared.confirm(window)

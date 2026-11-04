@@ -172,6 +172,15 @@ struct WindowManagementSettingsView: View {
 
             Section("Window Preview") {
                 VStack(alignment: .leading, spacing: 8) {
+                    Toggle("Highlight hovered window", isOn: $previewAppearance.highlightsHoveredWindow)
+
+                    Text("Hover a preview for 150 ms to dim the desktop and show its window in place. Click to activate the window. Without Screen Recording permission, previews continue normally without highlighting.")
+                        .foregroundStyle(.secondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(.vertical, 4)
+
+                VStack(alignment: .leading, spacing: 8) {
                     Text("Corner Style")
                         .font(.headline)
 
